@@ -504,30 +504,100 @@ def load_and_clean(
     return df, log
 
 
-def xray_samples_by_room(df: pd.DataFrame) -> dict[str, np.ndarray]:
-    """Return ``{'standing': ..., 'laying': ...}`` X-ray durations in minutes.
+XRAY_INTERDEPARTURE_MAX_MINUTES = 15.0
 
-    Only rows that actually took an X-ray (``xray_wait_time`` present) and
-    whose room type is either ``standing`` or ``laying`` are kept, so the
-    caller can fit the two distributions independently.
+
+def xray_interdeparture_times(
+    df: pd.DataFrame,
+    max_gap_minutes: float = XRAY_INTERDEPARTURE_MAX_MINUTES,
+) -> pd.DataFrame:
+    """Consecutive-departure gaps at the X-ray modality, tagged as service vs idle.
+
+    Queueing argument: while the X-ray device is busy back-to-back, the time
+    between two consecutive departures equals the service time of the second
+    patient. Gaps longer than ``max_gap_minutes`` indicate that the device
+    went idle in between (no-one in queue), so those gaps are **idle time**
+    and do not belong to the service-time sample.
+
+    Returns a DataFrame with columns:
+    ``_date``, ``xray_room_type``, ``CEKIM_ZAMANI``, ``interdeparture_minutes``,
+    ``is_service_sample`` (``True`` iff ``0 < gap <= max_gap_minutes``).
+    The raw gaps are preserved so the notebook can plot the full histogram
+    and visually defend the 15-minute threshold.
     """
 
+    keep_rooms = ("standing", "laying")
+    source = df.dropna(subset=["CEKIM_ZAMANI"]).copy()
+    source = source[source["xray_room_type"].isin(keep_rooms)]
+    source["_date"] = source["CEKIM_ZAMANI"].dt.date
+    source = source.sort_values(["xray_room_type", "_date", "CEKIM_ZAMANI"])
+    source["interdeparture_minutes"] = (
+        source.groupby(["xray_room_type", "_date"])["CEKIM_ZAMANI"]
+        .diff()
+        .dt.total_seconds()
+        .div(60.0)
+    )
+    source = source.dropna(subset=["interdeparture_minutes"])
+    source["is_service_sample"] = (source["interdeparture_minutes"] > 0) & (
+        source["interdeparture_minutes"] <= max_gap_minutes
+    )
+    return source[
+        ["_date", "xray_room_type", "CEKIM_ZAMANI", "interdeparture_minutes", "is_service_sample"]
+    ].reset_index(drop=True)
+
+
+def xray_samples_by_room(
+    df: pd.DataFrame,
+    max_gap_minutes: float = XRAY_INTERDEPARTURE_MAX_MINUTES,
+) -> dict[str, np.ndarray]:
+    """Return per-room X-ray **service-time** samples (minutes), estimated as
+    consecutive-departure gaps on the same modality and same day.
+
+    Filter rule (inherited from :func:`xray_interdeparture_times`):
+    ``0 < gap <= max_gap_minutes``. Gaps > ``max_gap_minutes`` are treated
+    as idle time and discarded from the service-time sample.
+    """
+
+    diffs = xray_interdeparture_times(df, max_gap_minutes=max_gap_minutes)
+    kept = diffs[diffs["is_service_sample"]]
     out: dict[str, np.ndarray] = {}
-    with_xray = df.dropna(subset=["xray_wait_time"])
     for room in ("standing", "laying"):
-        mask = with_xray["xray_room_type"] == room
-        out[room] = with_xray.loc[mask, "xray_wait_time"].to_numpy()
+        out[room] = kept.loc[kept["xray_room_type"] == room, "interdeparture_minutes"].to_numpy()
     return out
 
 
 def compute_routing_probabilities(df: pd.DataFrame) -> pd.DataFrame:
-    """Per-department probability of being sent to the X-ray room."""
+    """Per-department X-ray routing probabilities.
+
+    - ``xray_probability``: share of a department's visits that are sent to
+      the X-ray modality (``TETKIK_ISTEK_SAATI`` present).
+    - ``prob_standing`` / ``prob_laying``: conditional on being sent to X-ray,
+      share routed to the standing (room suffix 031) vs laying (032) bucky.
+      Rooms tagged ``other`` or ``none`` are excluded from the denominator so
+      ``prob_standing + prob_laying`` sums to 1 whenever either is positive.
+    """
 
     grouped = df.groupby("department", dropna=False)
     total = grouped.size().rename("visits")
     xray = grouped["TETKIK_ISTEK_SAATI"].apply(lambda s: s.notna().sum()).rename("xray_visits")
-    out = pd.concat([total, xray], axis=1)
-    out["xray_probability"] = out["xray_visits"] / out["visits"]
+
+    xray_rows = df.dropna(subset=["TETKIK_ISTEK_SAATI"])
+    room_counts = (
+        xray_rows.groupby(["department", "xray_room_type"], dropna=False)
+        .size()
+        .unstack(fill_value=0)
+    )
+    standing = room_counts.get("standing", pd.Series(0, index=room_counts.index)).rename("standing_visits")
+    laying = room_counts.get("laying", pd.Series(0, index=room_counts.index)).rename("laying_visits")
+
+    out = pd.concat([total, xray, standing, laying], axis=1).fillna(0)
+    out[["visits", "xray_visits", "standing_visits", "laying_visits"]] = out[
+        ["visits", "xray_visits", "standing_visits", "laying_visits"]
+    ].astype("int64")
+    out["xray_probability"] = out["xray_visits"] / out["visits"].replace(0, np.nan)
+    denom = (out["standing_visits"] + out["laying_visits"]).replace(0, np.nan)
+    out["prob_standing"] = out["standing_visits"] / denom
+    out["prob_laying"] = out["laying_visits"] / denom
     return out.sort_values("visits", ascending=False)
 
 

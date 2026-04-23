@@ -21,6 +21,31 @@ routing:
     KneeMeniscus: 0.4688
     Unknown: 0.678
     BoneDeformity: 0.1765
+  xray_room_split:
+    AdultHipKnee:
+      standing: 0.5157
+      laying: 0.4843
+    ShoulderSports:
+      standing: 0.7703
+      laying: 0.2297
+    ChildOrtho:
+      standing: 0.5312
+      laying: 0.4688
+    BoneCyst:
+      standing: 0.4842
+      laying: 0.5158
+    Spine:
+      standing: 0.6588
+      laying: 0.3412
+    KneeMeniscus:
+      standing: 0.7333
+      laying: 0.2667
+    Unknown:
+      standing: 0.625
+      laying: 0.375
+    BoneDeformity:
+      standing: 0.3333
+      laying: 0.6667
 service_times:
   initial_screening:
     dist: lognorm
@@ -45,68 +70,68 @@ service_times:
       n_after: 1515
   xray_process:
     pooled:
-      dist: gamma
+      dist: lognorm
       params:
-      - 1.7571833935940355
-      - 4.896505999999317
-      - 9.82754312120883
-      ks_p: 0.14863486785189695
-      aic: 7414.362077540399
-      n: 983
-      n_raw: 1022
+      - 0.5768593237853993
+      - -0.6144436435544366
+      - 2.884051084943873
+      ks_p: 0.0625878805919976
+      aic: 3460.935890080532
+      n: 896
+      n_raw: 954
       iqr_filter:
-        n_in: 1022
-        n_outliers: 39
-        q1: 12.954166666666666
-        q3: 31.641666666666666
-        iqr: 18.6875
+        n_in: 954
+        n_outliers: 58
+        q1: 1.35
+        q3: 4.379166666666666
+        iqr: 3.0291666666666663
         lower: 0.0
-        upper: 59.672916666666666
+        upper: 8.922916666666666
         factor: 1.5
-        n_before: 1022
-        n_after: 983
+        n_before: 954
+        n_after: 896
     standing:
+      dist: lognorm
+      params:
+      - 0.569614295437256
+      - -0.6108048368634689
+      - 2.713118482831239
+      ks_p: 0.11488063571871232
+      aic: 1952.953487127037
+      n: 525
+      n_raw: 552
+      iqr_filter:
+        n_in: 552
+        n_outliers: 27
+        q1: 1.3333333333333333
+        q3: 4.033333333333333
+        iqr: 2.7
+        lower: 0.0
+        upper: 8.083333333333334
+        factor: 1.5
+        n_before: 552
+        n_after: 525
+    laying:
       dist: gamma
       params:
-      - 1.885445370047164
-      - 5.030401727121693
-      - 7.906828551475945
-      ks_p: 0.7003993456289197
-      aic: 3997.688687575692
-      n: 554
-      n_raw: 580
+      - 1.962204043943877
+      - -0.03621543031812083
+      - 1.6608257216474587
+      ks_p: 0.3039733504104416
+      aic: 1575.7676030035827
+      n: 379
+      n_raw: 402
       iqr_filter:
-        n_in: 580
-        n_outliers: 26
-        q1: 12.4125
-        q3: 27.766666666666666
-        iqr: 15.354166666666666
+        n_in: 402
+        n_outliers: 23
+        q1: 1.5
+        q3: 4.8625
+        iqr: 3.3625
         lower: 0.0
-        upper: 50.797916666666666
+        upper: 9.90625
         factor: 1.5
-        n_before: 580
-        n_after: 554
-    laying:
-      dist: weibull_min
-      params:
-      - 1.3610686621911312
-      - 4.9616412112925925
-      - 22.878530248701065
-      ks_p: 0.14742710973693873
-      aic: 3411.2302948492747
-      n: 428
-      n_raw: 435
-      iqr_filter:
-        n_in: 435
-        n_outliers: 7
-        q1: 13.641666666666666
-        q3: 37.45833333333333
-        iqr: 23.816666666666663
-        lower: 0.0
-        upper: 73.18333333333332
-        factor: 1.5
-        n_before: 435
-        n_after: 428
+        n_before: 402
+        n_after: 379
   secondary_screening:
     dist: triang
     params:
@@ -196,3 +221,8 @@ assumptions:
   late_arrival_cutoff: '16:00'
   scoliosis_room_id: 160
   appointment_deviation_hours: 1.0
+  xray_service_time_method:
+    definition: consecutive-departure gap on same (_date, xray_room_type)
+    idle_cutoff_minutes: 15.0
+    note: Gaps > idle_cutoff_minutes are treated as machine idle time and excluded
+      from the service-time sample.
