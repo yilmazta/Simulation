@@ -25,40 +25,88 @@ service_times:
   initial_screening:
     dist: lognorm
     params:
-    - 1.4913826257503515
-    - 0.028523968060022963
-    - 2.1826520330288774
-    ks_p: 7.246431427151981e-06
-    aic: 8832.82487703388
-    n: 1698
+    - 0.992806755944398
+    - -0.03425225017121118
+    - 1.6283492475970476
+    ks_p: 0.0017598150584924534
+    aic: 5760.836771355984
+    n: 1515
+    n_raw: 1698
+    iqr_filter:
+      n_in: 1698
+      n_outliers: 183
+      q1: 0.8166666666666667
+      q3: 4.929166666666667
+      iqr: 4.112500000000001
+      lower: 0.0
+      upper: 11.097916666666668
+      factor: 1.5
+      n_before: 1698
+      n_after: 1515
   xray_process:
     pooled:
-      dist: lognorm
+      dist: gamma
       params:
-      - 0.8048757076523901
-      - 3.521624845826139
-      - 15.704468308088941
-      ks_p: 0.4116268432861576
-      aic: 8091.688714979158
-      n: 1022
+      - 1.7571833935940355
+      - 4.896505999999317
+      - 9.82754312120883
+      ks_p: 0.14863486785189695
+      aic: 7414.362077540399
+      n: 983
+      n_raw: 1022
+      iqr_filter:
+        n_in: 1022
+        n_outliers: 39
+        q1: 12.954166666666666
+        q3: 31.641666666666666
+        iqr: 18.6875
+        lower: 0.0
+        upper: 59.672916666666666
+        factor: 1.5
+        n_before: 1022
+        n_after: 983
     standing:
-      dist: lognorm
+      dist: gamma
       params:
-      - 0.8232432459680336
-      - 4.0364522373105105
-      - 13.748213824836718
-      ks_p: 0.4781557933520588
-      aic: 4466.598904701567
-      n: 580
+      - 1.885445370047164
+      - 5.030401727121693
+      - 7.906828551475945
+      ks_p: 0.7003993456289197
+      aic: 3997.688687575692
+      n: 554
+      n_raw: 580
+      iqr_filter:
+        n_in: 580
+        n_outliers: 26
+        q1: 12.4125
+        q3: 27.766666666666666
+        iqr: 15.354166666666666
+        lower: 0.0
+        upper: 50.797916666666666
+        factor: 1.5
+        n_before: 580
+        n_after: 554
     laying:
-      dist: lognorm
+      dist: weibull_min
       params:
-      - 0.7408897725990383
-      - 2.2234800790205815
-      - 19.4374433743562
-      ks_p: 0.0618718419399803
-      aic: 3561.0256595133633
-      n: 435
+      - 1.3610686621911312
+      - 4.9616412112925925
+      - 22.878530248701065
+      ks_p: 0.14742710973693873
+      aic: 3411.2302948492747
+      n: 428
+      n_raw: 435
+      iqr_filter:
+        n_in: 435
+        n_outliers: 7
+        q1: 13.641666666666666
+        q3: 37.45833333333333
+        iqr: 23.816666666666663
+        lower: 0.0
+        upper: 73.18333333333332
+        factor: 1.5
+        n_before: 435
+        n_after: 428
   secondary_screening:
     dist: triang
     params:
@@ -68,6 +116,18 @@ service_times:
     ks_p: 0.7131876633060098
     aic: 1360.9214771938255
     n: 338
+    n_raw: 338
+    iqr_filter:
+      n_in: 338
+      n_outliers: 0
+      q1: 3.7666666666666666
+      q3: 6.570833333333333
+      iqr: 2.8041666666666663
+      lower: 0.0
+      upper: 10.777083333333332
+      factor: 1.5
+      n_before: 338
+      n_after: 338
 arrivals:
   walkin:
     dist: lognorm
@@ -79,14 +139,52 @@ arrivals:
     aic: 5089.670823629123
     n: 763
   appointment:
-    dist: lognorm
-    params:
-    - 1.0564329583026255
-    - 0.2367421959099008
-    - 5.526609430076776
-    ks_p: 5.30803319355116e-07
-    aic: 5035.789597093184
-    n: 790
+    mode: deterministic_schedule
+    sim_time_zero_is: 08:00_first_day
+    day_length_minutes: 1440
+    schedules:
+      schedule_1:
+        description: Every 6 min, 08:00-12:00 and 13:00-16:00
+        windows:
+        - start: 08:00
+          end: '12:00'
+          interval_minutes: 6
+        - start: '13:00'
+          end: '16:00'
+          interval_minutes: 6
+      schedule_2:
+        description: Mixed intervals by block
+        windows:
+        - start: 08:00
+          end: '10:00'
+          interval_minutes: 6
+        - start: '10:00'
+          end: '12:00'
+          interval_minutes: 10
+        - start: '13:00'
+          end: '15:00'
+          interval_minutes: 8
+        - start: '15:00'
+          end: '16:00'
+          interval_minutes: 10
+      schedule_3:
+        description: 'Morning only: 6 min then 8 min'
+        windows:
+        - start: 08:00
+          end: '10:00'
+          interval_minutes: 6
+        - start: '10:00'
+          end: '12:00'
+          interval_minutes: 8
+    department_schedules:
+      AdultHipKnee: schedule_1
+      ShoulderSports: schedule_1
+      ChildOrtho: schedule_1
+      BoneCyst: schedule_1
+      Spine: schedule_1
+      KneeMeniscus: schedule_1
+      Unknown: schedule_1
+      BoneDeformity: schedule_1
 assumptions:
   walkin_jitter:
     dist: triang

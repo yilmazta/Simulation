@@ -52,6 +52,9 @@ APPOINTMENT_DEVIATION_HOURS = 1.0
 SECONDARY_MIN_MINUTES = 2.0
 SECONDARY_MAX_MINUTES = 10.0
 
+# Tukey IQR rule for outlier removal before distribution fitting
+DEFAULT_IQR_FACTOR = 1.5
+
 
 @dataclass
 class CleaningLog:
@@ -682,4 +685,70 @@ def pick_winner(fit_table: pd.DataFrame) -> dict | None:
         "aic": row["aic"],
         "n": int(row["n"]),
         "is_accepted": bool(row["is_accepted"]),
+    }
+
+
+def iqr_outlier_stats(
+    samples: Iterable[float] | np.ndarray,
+    factor: float = DEFAULT_IQR_FACTOR,
+) -> dict:
+    """Robust IQR (Tukey) bounds on the positive, finite part of the sample.
+
+    Intervals are :math:`[Q_1 - f \\cdot IQR,\\ Q_3 + f \\cdot IQR]`
+    (default *f* = 1.5). Used to report and filter outliers before
+    :func:`fit_distributions` so that heavy tails from data-entry or rare
+    clinical cases do not dominate the K-S fit.
+    """
+
+    arr = np.asarray(list(samples), dtype=float)
+    valid = arr[np.isfinite(arr) & (arr > 0)]
+    n_in = int(valid.size)
+    if n_in < 4:
+        return {
+            "n_in": n_in,
+            "n_outliers": 0,
+            "q1": float("nan"),
+            "q3": float("nan"),
+            "iqr": float("nan"),
+            "lower": float("nan"),
+            "upper": float("nan"),
+            "factor": float(factor),
+        }
+    q1, q3 = np.quantile(valid, [0.25, 0.75])
+    iqr = q3 - q1
+    lower = q1 - factor * iqr
+    upper = q3 + factor * iqr
+    lower = max(float(lower), 0.0)
+    in_fence = (valid >= lower) & (valid <= upper)
+    return {
+        "n_in": n_in,
+        "n_outliers": int(n_in - np.sum(in_fence)),
+        "q1": float(q1),
+        "q3": float(q3),
+        "iqr": float(iqr),
+        "lower": float(lower),
+        "upper": float(upper),
+        "factor": float(factor),
+    }
+
+
+def apply_iqr_filter(
+    samples: Iterable[float] | np.ndarray,
+    factor: float = DEFAULT_IQR_FACTOR,
+) -> tuple[np.ndarray, dict]:
+    """Drop samples outside the IQR fence; return ``(kept, stats)``."""
+
+    arr = np.asarray(list(samples), dtype=float)
+    stats_dict = iqr_outlier_stats(arr, factor=factor)
+    if stats_dict["n_in"] < 4 or not np.isfinite(stats_dict["lower"]):
+        kept = arr[np.isfinite(arr) & (arr > 0)]
+        n_pos = int((np.isfinite(arr) & (arr > 0)).sum())
+        return kept, {**stats_dict, "n_after": int(kept.size), "n_before": n_pos}
+    lo, hi = stats_dict["lower"], stats_dict["upper"]
+    mask = np.isfinite(arr) & (arr > 0) & (arr >= lo) & (arr <= hi)
+    kept = arr[mask]
+    return kept, {
+        **stats_dict,
+        "n_before": int((np.isfinite(arr) & (arr > 0)).sum()),
+        "n_after": int(kept.size),
     }
