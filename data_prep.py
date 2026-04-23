@@ -176,6 +176,49 @@ def load_raw(path: str) -> pd.DataFrame:
     return df
 
 
+def _rontgen_room_missing(series: pd.Series) -> pd.Series:
+    """True where ``RONTGEN_ODA_NO`` is null, blank, or non-numeric garbage."""
+
+    num = pd.to_numeric(series, errors="coerce")
+    text = series.astype("string").str.strip()
+    text_blank = text.isna() | (text == "")
+    return text_blank & num.isna()
+
+
+def drop_cekim_without_rontgen_room(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
+    """Drop rows that have an imaging timestamp but no X-ray room number."""
+
+    before = len(df)
+    bad = df["CEKIM_ZAMANI"].notna() & _rontgen_room_missing(df["RONTGEN_ODA_NO"])
+    cleaned = df.loc[~bad].copy()
+
+    if log is not None:
+        log.record(
+            "drop_cekim_without_rontgen_room",
+            before,
+            len(cleaned),
+            note="Removed rows with CEKIM_ZAMANI set but RONTGEN_ODA_NO missing.",
+        )
+    return cleaned
+
+
+def drop_tetkik_without_muayene_kabul(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
+    """Drop rows with an X-ray request time but no exam-accept timestamp."""
+
+    before = len(df)
+    bad = df["TETKIK_ISTEK_SAATI"].notna() & df["MUAYENE_KABUL_ZAMANI"].isna()
+    cleaned = df.loc[~bad].copy()
+
+    if log is not None:
+        log.record(
+            "drop_tetkik_without_muayene_kabul",
+            before,
+            len(cleaned),
+            note="Removed rows with TETKIK_ISTEK_SAATI set but MUAYENE_KABUL_ZAMANI missing.",
+        )
+    return cleaned
+
+
 def consolidate_xray_duplicates(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
     """Collapse multi-angle X-ray rows into a single patient visit.
 
@@ -607,6 +650,8 @@ def load_and_clean(
     df = load_raw(path)
     log.record("load_raw", len(df), len(df), note=f"Loaded {len(df)} raw rows from {path}")
 
+    df = drop_cekim_without_rontgen_room(df, log)
+    df = drop_tetkik_without_muayene_kabul(df, log)
     df = consolidate_xray_duplicates(df, log)
     df = drop_room_160(df, log)
     df = flag_call_time_anomaly(df, log)

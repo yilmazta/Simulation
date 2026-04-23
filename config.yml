@@ -13,8 +13,8 @@ resources:
     laying: 1
 routing:
   xray_probability:
-    AdultHipKnee: 0.6363
-    ShoulderSports: 0.4792
+    AdultHipKnee: 0.6335
+    ShoulderSports: 0.4759
     ChildOrtho: 0.5424
     BoneCyst: 0.468
     Spine: 0.509
@@ -23,8 +23,8 @@ routing:
     BoneDeformity: 0.1765
   xray_room_split:
     AdultHipKnee:
-      standing: 0.5157
-      laying: 0.4843
+      standing: 0.5167
+      laying: 0.4833
     ShoulderSports:
       standing: 0.7703
       laying: 0.2297
@@ -51,11 +51,11 @@ service_times:
     xray_requested:
       dist: lognorm
       params:
-      - 0.7599963378113941
-      - 0.024588927295818474
-      - 0.8744212408401033
-      ks_p: 0.08666380000066842
-      aic: 1810.4026195023202
+      - 0.7599629438703579
+      - 0.024652331637450783
+      - 0.8741635326251687
+      ks_p: 0.08530161909819134
+      aic: 1809.7976966160782
       n: 893
       n_raw: 957
       iqr_filter:
@@ -94,45 +94,45 @@ service_times:
     pooled:
       dist: lognorm
       params:
-      - 0.5768593237853993
-      - -0.6144436435544366
-      - 2.884051084943873
-      ks_p: 0.0625878805919976
-      aic: 3460.935890080532
-      n: 896
+      - 0.5750416275937652
+      - -0.6216821588316231
+      - 2.8957238401384817
+      ks_p: 0.07209856893324507
+      aic: 3458.660830430135
+      n: 895
       n_raw: 954
       iqr_filter:
         n_in: 954
-        n_outliers: 58
+        n_outliers: 59
         q1: 1.35
-        q3: 4.379166666666666
-        iqr: 3.0291666666666663
+        q3: 4.383333333333334
+        iqr: 3.0333333333333337
         lower: 0.0
-        upper: 8.922916666666666
+        upper: 8.933333333333334
         factor: 1.5
         n_before: 954
-        n_after: 896
+        n_after: 895
     standing:
       dist: lognorm
       params:
-      - 0.569614295437256
-      - -0.6108048368634689
-      - 2.713118482831239
-      ks_p: 0.11488063571871232
-      aic: 1952.953487127037
-      n: 525
+      - 0.566775066993195
+      - -0.62226620506948
+      - 2.7313143382138985
+      ks_p: 0.13070104117623738
+      aic: 1951.0132858874604
+      n: 524
       n_raw: 552
       iqr_filter:
         n_in: 552
-        n_outliers: 27
+        n_outliers: 28
         q1: 1.3333333333333333
-        q3: 4.033333333333333
-        iqr: 2.7
+        q3: 4.0375
+        iqr: 2.7041666666666666
         lower: 0.0
-        upper: 8.083333333333334
+        upper: 8.09375
         factor: 1.5
         n_before: 552
-        n_after: 525
+        n_after: 524
     laying:
       dist: gamma
       params:
@@ -157,34 +157,34 @@ service_times:
   secondary_screening:
     dist: triang
     params:
-    - 0.2775979155359286
-    - 1.4811324227464793
-    - 8.713565622924111
-    ks_p: 0.7131876633060098
-    aic: 1360.9214771938255
-    n: 338
-    n_raw: 338
+    - 0.2776760081002285
+    - 1.478414153685749
+    - 8.720903351054211
+    ks_p: 0.6933117926615915
+    aic: 1354.1343729573991
+    n: 336
+    n_raw: 336
     iqr_filter:
-      n_in: 338
+      n_in: 336
       n_outliers: 0
       q1: 3.7666666666666666
-      q3: 6.570833333333333
-      iqr: 2.8041666666666663
+      q3: 6.583333333333333
+      iqr: 2.8166666666666664
       lower: 0.0
-      upper: 10.777083333333332
+      upper: 10.808333333333334
       factor: 1.5
-      n_before: 338
-      n_after: 338
+      n_before: 336
+      n_after: 336
 arrivals:
   walkin:
     dist: lognorm
     params:
-    - 1.38161415541168
-    - -0.11472085822306008
-    - 4.803390589451258
-    ks_p: 0.4197962502320117
-    aic: 4602.380138412491
-    n: 694
+    - 1.3618710147038027
+    - -0.10508142350156874
+    - 4.877696711933667
+    ks_p: 0.5591172258417245
+    aic: 4590.460080972736
+    n: 692
   appointment:
     mode: deterministic_schedule
     sim_time_zero_is: 08:00_first_day
@@ -235,12 +235,12 @@ arrivals:
   appointment_inter_arrival:
     dist: lognorm
     params:
-    - 1.42798388564743
-    - -0.04517782355015243
-    - 2.7747148135661095
-    ks_p: 0.9726935096938134
-    aic: 5709.330172438946
-    n: 1020
+    - 1.413219215667712
+    - -0.059402143526258895
+    - 2.8710718817341165
+    ks_p: 0.30378132327062357
+    aic: 5729.573235929313
+    n: 1015
 assumptions:
   walkin_jitter:
     dist: triang
