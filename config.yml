@@ -6,7 +6,7 @@ resources:
     BoneCyst: 1
     Spine: 1
     KneeMeniscus: 1
-    Unknown: 1
+    Control: 1
     BoneDeformity: 1
   xray_rooms:
     standing: 1
@@ -19,7 +19,7 @@ routing:
     BoneCyst: 0.468
     Spine: 0.509
     KneeMeniscus: 0.4688
-    Unknown: 0.678
+    Control: 0.678
     BoneDeformity: 0.1765
   xray_room_split:
     AdultHipKnee:
@@ -40,7 +40,7 @@ routing:
     KneeMeniscus:
       standing: 0.7333
       laying: 0.2667
-    Unknown:
+    Control:
       standing: 0.625
       laying: 0.375
     BoneDeformity:
@@ -48,26 +48,48 @@ routing:
       laying: 0.6667
 service_times:
   initial_screening:
-    dist: lognorm
-    params:
-    - 0.992806755944398
-    - -0.03425225017121118
-    - 1.6283492475970476
-    ks_p: 0.0017598150584924534
-    aic: 5760.836771355984
-    n: 1515
-    n_raw: 1698
-    iqr_filter:
-      n_in: 1698
-      n_outliers: 183
-      q1: 0.8166666666666667
-      q3: 4.929166666666667
-      iqr: 4.112500000000001
-      lower: 0.0
-      upper: 11.097916666666668
-      factor: 1.5
-      n_before: 1698
-      n_after: 1515
+    xray_requested:
+      dist: lognorm
+      params:
+      - 0.7599963378113941
+      - 0.024588927295818474
+      - 0.8744212408401033
+      ks_p: 0.08666380000066842
+      aic: 1810.4026195023202
+      n: 893
+      n_raw: 957
+      iqr_filter:
+        n_in: 957
+        n_outliers: 64
+        q1: 0.55
+        q3: 1.8833333333333333
+        iqr: 1.3333333333333333
+        lower: 0.0
+        upper: 3.8833333333333333
+        factor: 1.5
+        n_before: 957
+        n_after: 893
+    no_xray:
+      dist: weibull_min
+      params:
+      - 2.0084611643421373
+      - -0.3922906685291999
+      - 5.184200822855753
+      ks_p: 0.6446800500719005
+      aic: 2507.594589822362
+      n: 557
+      n_raw: 558
+      iqr_filter:
+        n_in: 558
+        n_outliers: 1
+        q1: 2.3875
+        q3: 5.75
+        iqr: 3.3625
+        lower: 0.0
+        upper: 10.79375
+        factor: 1.5
+        n_before: 558
+        n_after: 557
   xray_process:
     pooled:
       dist: lognorm
@@ -157,12 +179,12 @@ arrivals:
   walkin:
     dist: lognorm
     params:
-    - 1.3664762129900294
-    - -0.12967309408066102
-    - 4.954004707221484
-    ks_p: 0.5286989798162866
-    aic: 5089.670823629123
-    n: 763
+    - 1.38161415541168
+    - -0.11472085822306008
+    - 4.803390589451258
+    ks_p: 0.4197962502320117
+    aic: 4602.380138412491
+    n: 694
   appointment:
     mode: deterministic_schedule
     sim_time_zero_is: 08:00_first_day
@@ -208,8 +230,17 @@ arrivals:
       BoneCyst: schedule_1
       Spine: schedule_1
       KneeMeniscus: schedule_1
-      Unknown: schedule_1
+      Control: schedule_1
       BoneDeformity: schedule_1
+  appointment_inter_arrival:
+    dist: lognorm
+    params:
+    - 1.42798388564743
+    - -0.04517782355015243
+    - 2.7747148135661095
+    ks_p: 0.9726935096938134
+    aic: 5709.330172438946
+    n: 1020
 assumptions:
   walkin_jitter:
     dist: triang
@@ -217,6 +248,13 @@ assumptions:
     mode_minutes: 0
     max_minutes: 5
     note: Patient crossed the front door somewhere in this window relative to MUAYENE_KABUL_ZAMANI.
+  appointment_jitter:
+    dist: triang
+    min_minutes: -10
+    mode_minutes: 0
+    max_minutes: 5
+    note: Same front-door uncertainty as walk-in_jitter, applied to MUAYENE_KABUL_ZAMANI
+      for scheduled patients when fitting inter-arrivals.
   follow_up_day: Wednesday
   late_arrival_cutoff: '16:00'
   scoliosis_room_id: 160

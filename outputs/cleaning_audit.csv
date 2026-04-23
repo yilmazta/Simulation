@@ -6,6 +6,8 @@ flag_call_time_anomaly,1870,1870,0,Masked 586 call-time values that were overwri
 flag_open_case,1870,1870,0,Flagged 150 open cases (no examination end time). Kept for arrival/routing stats.
 add_derived_columns,1870,1870,0,"initial_screening_time: 41 negatives -> NaN, xray_wait_time: 0 negatives -> NaN, secondary_screening_time: 0 negatives -> NaN, total_system_time: 3 negatives -> NaN"
 drop_impossible_durations,1870,1870,0,initial_screening_time: >503.22m -> NaN (0 rows); xray_wait_time: >460.89m -> NaN (1 rows); secondary_screening_time: >27.72m -> NaN (0 rows); total_system_time: >639.9m -> NaN (0 rows)
+mask_initial_screening_iqr_outliers,1870,1870,0,"fence [ 0, 11.1 ] min (factor=1.5); masked 183 of 1698 values"
 classify_walkin_vs_appointment,1870,1870,0,"patient_type counts: {'appointment': 1076, 'walkin': 794}"
-map_department,1870,1870,0,"Top primary departments: {'AdultHipKnee': 811, 'ShoulderSports': 313, 'ChildOrtho': 236, 'BoneCyst': 203, 'Spine': 167, 'KneeMeniscus': 64, 'Unknown': 59, 'BoneDeformity': 17}; rows whose doctor spans >1 specialty: 716"
+map_department,1870,1870,0,"Top primary departments: {'AdultHipKnee': 811, 'ShoulderSports': 313, 'ChildOrtho': 236, 'BoneCyst': 203, 'Spine': 167, 'KneeMeniscus': 64, 'Control': 59, 'BoneDeformity': 17}; rows whose doctor spans >1 specialty: 716"
+apply_department_patient_type_rules,1870,1870,0,ChildOrtho appointment policy: 236 rows (105 relabelled); Control walk-in policy: 59 rows (35 relabelled).
 anonymize_doctor,1870,1870,0,Collapsed doctor + assistants into one resource per department.

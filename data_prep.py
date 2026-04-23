@@ -40,6 +40,7 @@ DEPARTMENT_SHORT_NAMES: dict[str, str] = {
     "Kemik Kisti Hastalıkları": "BoneCyst",
     "Omurga Cerrahisi": "Spine",
     "Tümör Kemik ve Yumuşak Doku Tümörleri": "Tumor",
+    "Kontrol Polikliniği": "Control",
 }
 
 SCOLIOSIS_ROOM_SUFFIX = 160
@@ -48,6 +49,16 @@ LAYING_ROOM_SUFFIX = 32
 
 LATE_ARRIVAL_CUTOFF_HOUR = 16
 APPOINTMENT_DEVIATION_HOURS = 1.0
+
+# Clinic policy overrides after time-based :func:`classify_walkin_vs_appointment`.
+# Tumor accepts walk-ins alongside appointments — we do **not** force a single type there.
+APPOINTMENT_ONLY_DEPARTMENTS: frozenset[str] = frozenset({"ChildOrtho"})
+WALKIN_ONLY_DEPARTMENTS: frozenset[str] = frozenset({"Control"})
+
+# Doctors whose primary department is fixed by clinic operations (not only the specialty CSV).
+DOCTOR_PRIMARY_DEPARTMENT_OVERRIDES: dict[str, str] = {
+    "BERKAY DOĞAN": "Control",
+}
 
 SECONDARY_MIN_MINUTES = 2.0
 SECONDARY_MAX_MINUTES = 10.0
@@ -280,7 +291,9 @@ def add_derived_columns(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.
     """Derive the four duration variables we care about, in minutes.
 
     - ``initial_screening_time``: from accept-into-exam (``MUAYENE_KABUL_ZAMANI``)
-      until the doctor either asks for an X-ray or closes the case.
+      until the doctor either asks for an X-ray or closes the case. After
+      :func:`drop_impossible_durations`, :func:`mask_initial_screening_iqr_outliers`
+      masks Tukey-IQR outliers on this column only.
     - ``xray_wait_time``: from X-ray request to first shot.
     - ``secondary_screening_time``: from the *second* call (``CAGRILMA_ZAMANI``)
       until close. Per the updated plan we isolate the ``[2, 10]`` minute
@@ -348,6 +361,58 @@ def drop_impossible_durations(df: pd.DataFrame, log: CleaningLog | None = None) 
     return df
 
 
+def mask_initial_screening_iqr_outliers(
+    df: pd.DataFrame,
+    log: CleaningLog | None = None,
+    *,
+    factor: float = DEFAULT_IQR_FACTOR,
+) -> pd.DataFrame:
+    """Set ``initial_screening_time`` to NaN outside Tukey IQR fences.
+
+    Fences use every finite, non-negative screening duration (zeros included).
+    Runs after :func:`drop_impossible_durations` so gross data-entry spikes are
+    already removed before quartiles are computed.
+    """
+
+    df = df.copy()
+    col = "initial_screening_time"
+    if col not in df.columns:
+        return df
+
+    arr = df[col].to_numpy(dtype=float)
+    valid = arr[np.isfinite(arr) & (arr >= 0)]
+    n_in = int(valid.size)
+    if n_in < 4:
+        if log is not None:
+            log.record(
+                "mask_initial_screening_iqr_outliers",
+                len(df),
+                len(df),
+                note=f"skipped (n={n_in}<4 finite non-negative values)",
+            )
+        return df
+
+    q1, q3 = np.quantile(valid, [0.25, 0.75])
+    iqr = float(q3 - q1)
+    lower = max(float(q1 - factor * iqr), 0.0)
+    upper = float(q3 + factor * iqr)
+    outside = np.isfinite(arr) & ((arr < lower) | (arr > upper))
+    n_mask = int(outside.sum())
+    df.loc[outside, col] = np.nan
+
+    if log is not None:
+        log.record(
+            "mask_initial_screening_iqr_outliers",
+            len(df),
+            len(df),
+            note=(
+                f"fence [ {lower:.4g}, {upper:.4g} ] min (factor={factor}); "
+                f"masked {n_mask} of {n_in} values"
+            ),
+        )
+    return df
+
+
 def classify_walkin_vs_appointment(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
     """Label each visit as ``walkin`` or ``appointment``.
 
@@ -385,6 +450,51 @@ def classify_walkin_vs_appointment(df: pd.DataFrame, log: CleaningLog | None = N
             len(df),
             len(df),
             note=f"patient_type counts: {counts}",
+        )
+    return df
+
+
+def apply_department_patient_type_rules(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
+    """Apply department-level walk-in vs appointment policy on top of time-based labels.
+
+    - **ChildOrtho:** appointment-only polyclinic — every visit is ``appointment``.
+    - **Control:** kontrol / follow-up — every visit is ``walkin``.
+
+    **Tumor** is intentionally excluded: the service accepts walk-ins but also
+    scheduled patients, so :func:`classify_walkin_vs_appointment` keeps the
+    time-based split.
+
+    Requires ``department`` (from :func:`map_department`) and ``patient_type``.
+    """
+
+    df = df.copy()
+    if "department" not in df.columns or "patient_type" not in df.columns:
+        raise KeyError("apply_department_patient_type_rules expects 'department' and 'patient_type' columns")
+
+    appt_mask = df["department"].isin(APPOINTMENT_ONLY_DEPARTMENTS)
+    walk_mask = df["department"].isin(WALKIN_ONLY_DEPARTMENTS)
+    if (appt_mask & walk_mask).any():
+        bad = df.loc[appt_mask & walk_mask, "department"].unique().tolist()
+        raise ValueError(f"Department(s) cannot be both appointment-only and walk-in-only: {bad}")
+
+    before = df["patient_type"].copy()
+    df.loc[appt_mask, "patient_type"] = "appointment"
+    df.loc[walk_mask, "patient_type"] = "walkin"
+
+    n_child = int(appt_mask.sum())
+    n_control = int(walk_mask.sum())
+    relabel_to_appt = int((appt_mask & (before != "appointment")).sum())
+    relabel_to_walk = int((walk_mask & (before != "walkin")).sum())
+
+    if log is not None:
+        log.record(
+            "apply_department_patient_type_rules",
+            len(df),
+            len(df),
+            note=(
+                f"ChildOrtho appointment policy: {n_child} rows ({relabel_to_appt} relabelled); "
+                f"Control walk-in policy: {n_control} rows ({relabel_to_walk} relabelled)."
+            ),
         )
     return df
 
@@ -428,6 +538,12 @@ def map_department(
     else:
         df["department"] = df["DOKTOR_ADI"]
         df["departments_all"] = df["DOKTOR_ADI"]
+
+    for doc_name, dept_override in DOCTOR_PRIMARY_DEPARTMENT_OVERRIDES.items():
+        match = df["DOKTOR_ADI"].astype("string").str.strip() == doc_name
+        if match.any():
+            df.loc[match, "department"] = dept_override
+            df.loc[match, "departments_all"] = dept_override
 
     if log is not None:
         dept_counts = df["department"].value_counts().head(10).to_dict()
@@ -497,8 +613,10 @@ def load_and_clean(
     df = flag_open_case(df, log)
     df = add_derived_columns(df, log)
     df = drop_impossible_durations(df, log)
+    df = mask_initial_screening_iqr_outliers(df, log=log)
     df = classify_walkin_vs_appointment(df, log)
     df = map_department(df, doctor_to_department, log)
+    df = apply_department_patient_type_rules(df, log)
     df = anonymize_doctor(df, log)
     df = tag_xray_room(df)
     return df, log
