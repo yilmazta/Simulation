@@ -1,0 +1,100 @@
+resources:
+  doctors_per_department:
+    AdultHipKnee: 1
+    ShoulderSports: 1
+    ChildOrtho: 1
+    BoneCyst: 1
+    Spine: 1
+    KneeMeniscus: 1
+    Unknown: 1
+    BoneDeformity: 1
+  xray_rooms:
+    standing: 1
+    laying: 1
+routing:
+  xray_probability:
+    AdultHipKnee: 0.6363
+    ShoulderSports: 0.4792
+    ChildOrtho: 0.5424
+    BoneCyst: 0.468
+    Spine: 0.509
+    KneeMeniscus: 0.4688
+    Unknown: 0.678
+    BoneDeformity: 0.1765
+service_times:
+  initial_screening:
+    dist: lognorm
+    params:
+    - 1.4913826257503515
+    - 0.028523968060022963
+    - 2.1826520330288774
+    ks_p: 7.246431427151981e-06
+    aic: 8832.82487703388
+    n: 1698
+  xray_process:
+    pooled:
+      dist: lognorm
+      params:
+      - 0.8048757076523901
+      - 3.521624845826139
+      - 15.704468308088941
+      ks_p: 0.4116268432861576
+      aic: 8091.688714979158
+      n: 1022
+    standing:
+      dist: lognorm
+      params:
+      - 0.8232432459680336
+      - 4.0364522373105105
+      - 13.748213824836718
+      ks_p: 0.4781557933520588
+      aic: 4466.598904701567
+      n: 580
+    laying:
+      dist: lognorm
+      params:
+      - 0.7408897725990383
+      - 2.2234800790205815
+      - 19.4374433743562
+      ks_p: 0.0618718419399803
+      aic: 3561.0256595133633
+      n: 435
+  secondary_screening:
+    dist: triang
+    params:
+    - 0.2775979155359286
+    - 1.4811324227464793
+    - 8.713565622924111
+    ks_p: 0.7131876633060098
+    aic: 1360.9214771938255
+    n: 338
+arrivals:
+  walkin:
+    dist: lognorm
+    params:
+    - 1.3664762129900294
+    - -0.12967309408066102
+    - 4.954004707221484
+    ks_p: 0.5286989798162866
+    aic: 5089.670823629123
+    n: 763
+  appointment:
+    dist: lognorm
+    params:
+    - 1.0564329583026255
+    - 0.2367421959099008
+    - 5.526609430076776
+    ks_p: 5.30803319355116e-07
+    aic: 5035.789597093184
+    n: 790
+assumptions:
+  walkin_jitter:
+    dist: triang
+    min_minutes: -10
+    mode_minutes: 0
+    max_minutes: 5
+    note: Patient crossed the front door somewhere in this window relative to MUAYENE_KABUL_ZAMANI.
+  follow_up_day: Wednesday
+  late_arrival_cutoff: '16:00'
+  scoliosis_room_id: 160
+  appointment_deviation_hours: 1.0

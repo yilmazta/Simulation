@@ -1,0 +1,172 @@
+Çarşamba gününü en yoğun gün olarak...
+Çarşamba yoğun. Yani oradaki departmanları kullanarak simülasyonu yapabilirsiniz.
+Hocam peki geri kalan dataları kullanmamıza gerek yok mu?
+Kullanmayabilirsiniz. Ama mesela diyelim ki Çarşamba günü bir departman var. Aynı departman Pazartesi de ordaymış. O zaman service time'ını belirlemek isterken yani pazartesi olan datayı niye kullanmıyorsun?
+Anladım, daha accurate çıksın diye onları da kullanabiliriz.
+Ya da X-ray'de zaman var mesela. Şimdi niye bir günlük data kullanayım ki ben öbür tarafta beş günlük data var X-ray için.
+Biz şey dedik hani her gün için çok fazla olacak diye bir günü yapalım. Çarşamba gününü alıp onun şeyine göre uyarlayalım...
+Olur, okey.
+Ona göre mesela bizim muayeneye geliş hesaplamamız gerekiyor. Departman bazında hesaplarız. Altı departmanımız var, altı tane istatistik testi. Yani biz öyle ayırdık.
+Tamam.
+İnternetten baktık yöneldikleri yere. Hem birazcık kendimizi rahatlatmaya hem de neye göre yaptık işte öyle 6 departman çıkardık.
+Assumption olarak alabiliriz diye...
+Tabii ki.
+Sonra yani işte muayene için gelişleri şey yaptık, baktık mesela. Departman pazartesi de çalışıyor, çarşamba olmasına rağmen gelişleri ama yine de...
+Evet, gerçi çarşamba daha sık geliyorlar ama X-ray ile falan...
+Şimdi şöyle oluyor, çarşambanın özelliği şu. Ayakta gelen çok. Bir alışkanlıkları var onların. Kim acile gelirse, alçıyı takıyorlar, çarşamba kontrole gel diyorlar.
+O yüzden perşembe, cuma, cumartesi, pazar, pazartesi acile gelenlerin hepsi çarşamba kontrole geliyor.
+Salı çarşamba gelenler de haftaya çarşamba kontrole geliyor. Anlatabildim mi? Öyle bir şey var.
+Mesela şey denebilir. Ben mesela böyle bir senaryo olabilir. Ya şimdi şey geliyor, kontrol hastası, ama bütün kontrol hastaları çarşamba günü geldiği için problem oluyor.
+Dense ki kontrol hastalarının işte yarısı işte cuma gelse mesela, ne olur kontrol hasta sayımız yarı yarıya düşer. O zaman ne olurdu bir bakalım.
+En son senaryo analizi yapmak için...
+Olur. O zaman direkt cuma gününü alsak iyiydi. İkinci yoğun gün cuma çıkmıştı ya. Çarşamba çok pis duruyor.
+Oradan da çarşambadan cumaya almadan pazartesiye al deseniz...
+Salıyı falan alırdık...
+Şimdi çarşambayı eğer biz şey alırsak, ayakta hasta sayısı bizi biraz yoracak.
+Hani ayakta hastaları şöyle yapabilir miyiz? Mesela saatinin bir saat erken, randevu saati var onun bir saat erken veya bir saat geç gelmesi dışındaki herkesi ayakta sayabilir miyiz?
+Walk-in mi demek istiyorsun?
+Walk-in evet.
+Walk-in kendi geliş saatiyle randevu saati arasında X'ten fazla fark varsa walk-in sayıyorum diyebilirsin, güzel. Güzel bir yaklaşım bu.
+Sonuçta her türlü adam seçilmiş mesela 10 buçukta randevusu var, gelmiş 12 buçukta falan işte. Belki de evet.
+Genellikle ben datada şeyi fark ettim, adamın randevusu 11 buçukta ama 9 buçukta geliyor. O da walk-in o zaman.
+O çok vardı. Onu biz şey yapabiliriz değil mi? Ayakta hasta...
+Ayakta demeyelim, ayaktan hasta çünkü out-patient demek, karıştırır, walk-in diyelim. Walk-in deyin tamam. Öyle olabilir.
+Mesela yarım saat erken yarım saat geç dışındakı gelen herkes...
+Yarım saat geç biraz şey yapar çünkü bekliyor olabilir yarım saat gerçekten...
+Başka sorumuz yok yani bir günü alacaksak bir günün senaryosu. İşiniz kolaylaşacak. Biraz işimiz kolaylaşacak.
+Departmanlara önceliği sadece tümöre verdik.
+Şöyle tümör, tümörde walk-in her zaman müsaade ediliyor. Çocukta walk-in yok. Müsaade edilmiyor.
+Çünkü ona göre bir kuyruk bekleme süresi değişiyor hocam. X-ray'e gönderdiğinde mesela tümörlere öncelik verme şeyi yaptık.
+Tümör X-ray'e geldiği anda sıra beklemeden ilk o giriyor yani. Çıkanın yerine o giriyor. Öyle bir şey yaptık.
+Gerçekte öyle değil. O onu bir senaryo olarak değerlendirebilirsiniz. Gerçekte öyle değil.
+Gerçekte şöyle 7 yaş altı ve 65 yaş üstünün bir önceliği var. Dataya bakabilirsiniz, çocuk varsa 7 yaş altından küçük olma ihtimali var tabii ki.
+O yüzden orda bir değişiklik olabilir. Ama şunu da diyebilirsiniz, ben o gün çocuğu koymadım. Yok benim önceliğim orada.
+Çarşamba gününde her departmanı koymak da zorunlu değil mi hocam?
+Değil, 7 departman koyuyoruz. 7 tane oda var, 7 tane odada 7 tane departman var.
+Şimdi ekran başındaki arkadaşların sorusu: Röntgen odası belli olmayan... röntgen çektirmemiş olabilir.
+Muayene sonlandırma verisi olmayan dataları silmemiz gerekir mi? Hayır.
+Aynı hasta aynı data aynı doktora aynı süre zarfında birden fazla kez girilmiş bunların silinmesi gerekmiyor mu? Bence gerekmiyor. Onun bir anlamı var.
+Birden fazla... bir anlamı var ama onu nasıl ayırt edeceğiz?
+Şöyle onun anlamı şu: Her tetkik için ayrı bir randevu açılmak zorunda.
+Orda beş replication varsa bunun biri normal muayene, 4 tanesi de bu arkadaşın 4 farklı röntgen çektirdiğini. Yani bir giriyor 4 tane film çekiliyor anlamına gelir.
+Muayene sonlandırma verisi... Bir cevaplayayım mı önce? Muayene sonlandırma verisi yoksa, iki sebepten olabilir:
+Reçete yazılmamışsa muayene sonlandırma verisi olmuyor. Birinin onu "muayene bitti" diye kapatması lazım, çoğu zaman kapatmıyorlar.
+Haftada bir kapatıyorlar, akşam kapatıyorlar, bazen de kapatmıyorlar. Bu olabilir.
+Veya işte hastaya diyor ki "git röntgen çek, gene de bir bakalım" diyor, hasta gidiyor geri gelmiyor. O da kapanış verisinin olmaması anlamına gelir.
+Yani ben olsam datayı silmezdim, farklı yerlerde farklı şekilde kullanırdım.
+Hastaların muayene süresi negatif çıkıyor... Şöyle, muayeneye son çağrılma saati var.
+Yani orda bir çağrılma saati var ya o son çağrılma saati.
+Yani seni çağırdı gittin, röntgen istedi röntgene gittin, geri geldin bir daha çağırdı.
+O eski datanın üstüne yazdığı için senin ilk muayene başlangıç saatinle ilk çağrılma saatin, daha doğrusu son çağrılma saatin arasındaki fark negatif oluyor.
+Onu sadece tek randevularda kullanabilirsiniz. Yani tek girişlerde...
+Tetkik isteyen muayeneden önce görünüyor çünkü ikinci muayene girişini yapmış oluyor...
+Direkt ayıklamak mı gerekir artık nasıl kullanacağınıza siz karar vereceksiniz.
+First service time, second service time ve röntgen service time hesaplandı ama datalar temizlenmeden hesaplandı. Datada fazlaca sıfır var. Olmaz.
+Sıfır service time olmayacağını biliyorsun onları ayıklaman lazım. Yani zaten service time'ı nasıl hesapladığın da önemli.
+Bir de sadece first service time, second service time yok. Dört tane, bir tane daha var. Röntgene gitmeyenin service time'ı farklı.
+Yani negatif değerler olmaz, sıfır da olmaz. Sıfırı katamazsın çünkü gitmemiş demektir.
+Departmanı bilmiyorsak internetten bakacağız doktorun adına hangi departmanmış. Hocam gene yazmıyor...
+Hocam şöyle, biz ona baktık. Grup 1, Grup 2, Grup 3 diye de ayırmışlar. Ve bunları hangi departmana aktaracağımızı bilmiyoruz.
+Mesela deniz kalp diye doktor var 3 yerde de var. Hani grupta da var, diğer departmanlarda da var, onu varsayım olarak mı ilerleyeceğiz biz bunları sadece buraya...
+Evet varsayım yapıp ilerleyeceksiniz.
+Randevu başlama saati... Randevu saatini aslında randevunun yoğunluğunu görmek için... 6 dakikada bir mi 8 dakikada bir mi randevusu var onu görmek için kullanabilirsiniz.
+Bir de diyelim ki 10 dakikada bir randevusu var, işte saat 9, 9'u 10 geçe, 9.20, 9.30 diye gidiyor aynı doktorun.
+Ondan sonra saat 11'de 5 tane var. Beş farklı kişi gelmiş. Demek ki onlar 11 randevusu yazılmış ama onlar walk-in.
+Birisinin randevu girmesi lazım ona. Randevuyu girdiği zaman bir randevu saati oluşturuyorlar.
+O randevu saati işte ya son saati alıyor, ya bir saat atıyor, ya da sistem kendisi bir saat veriyor ona. O yüzden orda kullanabilirsiniz.
+Hocam bir de bazı hastaların tetkik istem saatleri var ama çağrılmaları yok...
+Eee evet olabilir. Çağrılması yok, son çağrılması yok. Tetkik istemi varsa kapıyı tıklamıştır "hocam sıra bendeydi beni çağırmadınız kimsin sen" demiştir "tamam TC'ni söyle" demiştir hiç çağrılmadan muayeneye başlamış olabilir.
+Hangi doktorun hangi departmanda olduğunu? Doktorun adını internetten aratıp hangi departmanda olduğunu bulabilirsin.
+Hiçbirine girmiyorsa kontrol departmanına attım, 3 gruba giriyorsa bunu böyle varsaydım diyebilirsin.
+Hocam bir şey sorabilir miyim? Yukarıda muayene süreleri negatif çıkabilir dediniz ya onu tam olarak anlayamadım ben nasıl negatif çıkıyor?
+Muayene süresi negatif olmaz, senin hesapladığın sayı negatif çıkabilir.
+Şöyle ki, muayene başlangıç saati, TC'nin son iki basamağını girdiği saat aslında.
+Ama bunu mesela tetkik istedi, tetkikten sonra girdiyse o zaman o bilgiyi geç girdiği için negatif gibi görünecek.
+Sen onu gerçekte negatif proses time olmayacağı için, onu hesaba katmayacaksın. Onu nasıl kullanabileceğinizi de siz kendiniz bulacaksınız.
+Yani hocam çağrılma saati aslında muayeneye başlama saati değil mi?
+Çağrılma saati muayeneye başlama saati değil. Çağrılma saati son çağrılma saati.
+Çağrılma saati şu demek, kapının önünde bi tane ekran var ya. O ekranda Utku Koç yazıyorsa, o Utku Koç'u yazması için içeride birisi bir düğmeye basıyor.
+O düğmeye son bastığı şey. Ben x-ray'e gittim geldiysem gene çağırdıysa, o zaman o son saati yazıyor. İlk çağrılma saati değil o son çağrılma saati.
+Evet Tuğba.
+Hocam bir de biz şey yaptık, böyle 3 tane 7 tane verisi olan doktorlar vardı. Hangi departmanda olduğu kendi sitelerinde de yazmıyor yani. Onları sildik.
+Koymayın. Anladım.
+Tamam hocam teşekkür ederim. Rica ederim.
+Yaren sen mi bir şey soracaktın mikrofon kapanıp açıldı çünkü?
+Yok hocam anladım ben teşekkür ederim.
+Tamam var mı başka sorusu olan? Yok, peki, özetleyecek olursak.
+Birazcık varsayarak, yani belli olmayan şeyleri bu şekilde varsaydım diyerek ilerlememiz gerekiyor anladığım kadarıyla.
+Evet. Burada şeyi de öğreniyorsunuz arkadaşlar. Bir noktada artık arkadaşlar burada daha fazla durmayalım bunu da böyle varsayıp geçmemiz lazım diye birinin demesi gerekiyor. Onu da öğrenmeniz lazım.
+Simülasyonun bütün olayı yeterince iyi oldu mu, devam edeceksin. Perfection'a gerek yok.
+Yeterince iyiyi nasıl ayarlayacağız peki?
+Kalan zamanı, buna harcayabileceğin zamana göre işte. Ama bir şey söyleyeceğim, that's how it happens in life. Tam böyle işliyor.
+Anlatabildim mi? Bir projeye... Bir de şöyle bir şey var, bir yerde bazen dur demen gerekiyor. Bir sürü detay var. Bir yerde dur demen gerekiyor.
+Diyeceksin ki arkadaşım şuradan şunun şunun da şu da etkilemez ya diyeceksin, basacaksın geçeceksin yani.
+Aslında fit edeceğiz yani.
+Hayır bak şimdi assumption'ını yaptın, analizini yaptın yok, gerçekçi değil. O zaman o assumption'ın demek ki çok fazla simplify etmişim deyip relax edebilirsin.
+Geriye dönebilirsin. Tek bir seferde assumption'ları yapacağım ondan sonra bir daha asla değiştirmeyeceğim değil, katolik nikahı değil bu yani.
+Hocam ben şeyi soracaktım. Şimdi diyelim örnek veriyorum Salı gününü incelemeye karar verdik. O gün 4 departman çalışıyor.
+Yok 7 departman çalışıyor.
+Bize 7 çalışıyor, birden fazla departman var ya..
+Var da bir sürü var da 20 tane mi ne var da ben anlamıyorum hangisi... Alt dal var..
+Yani hani şöyle ayıralım, bütün datayı sadece 7'ye ayırsak olmaz mı hocam?
+Olur. Bence ama az olur, onu 10'a ayırmak daha mantıklı, ama 7'ye de ayırabilirsin.
+Öyle daha mantıklı, şey...
+Olur, that's your assumption. Yaparsın geçer. Problem yok.
+Hocam bir de, kod yazarken bunları şey yaparken parametre gibi yazacağız değil mi? Bütün bulduğumuz geliş ratelerini, şeyleri kod kısmına geçtiğimizde işte biz bunu buradan aldık burada istatistik testleri yaptık sonrasında da..
+Testi yaptık, sistem izle exponential distribution mean bilmem ne, evet.
+Ondan sonra da orada arrival'ı generate ederken işte diyeceksin ki tümör walk in arrival diye bir blok yazacaksın, walk in arrival'la..
+Tek tek parametre edeceğiz, yok rastgele..
+Hayır hayır random gelmeyecek. Hayır sen fit ettin mi distribution'ı? Arrival'ı? Ettin.
+Ya da service time'ı fit ettin değil mi? Nedir, işte normal with mean 5 minutes standard deviation 1. Onu alacaksın simülasyonun gerekli yerine onu koyacaksın.
+Onu soruyorum yani standart sapmasını parametre olarak..
+Distribution neyse o distribution'ı ve parametrelerini oraya..
+Yani sistem bizim derste yazdığımız şey olacak..
+En başta böyle en aptal bir sistem yazsak böyle çok basit bir sistem.
+Sadece 10 dakikada bir geliyorlar, walk in yok. Hepsi x-ray'e gidiyor..
+Ya da böyle şeyle 0.2 ile x-ray'e gidiyor, 0.8 ile gitmiyor gibi..
+Tamam 0.2 biraz az olur ama yani şey, denemek için.
+Sadece çalışan böyle hani...
+Biz çalışanı yaptık, tamam bir tanesi gitsin. Gidiyor mu, x-ray'e gidiyor mu, x-ray'den geri geliyor mu, böyle bir şey.
+Yani, evet.
+Sonra bunun üzerine biz bu bulduğumuz şeyleri ekleyerek genişleteceğiz..
+Bencedir o. Yoksa hepsini böyle detayını koyup ondan sonra işin içinden debug edemezsin. Debug edemezsin. Bir yerde hata var bulamazsın, çıkamazsın içinden.
+Onu mesela bir case olarak inceleyebilir miyiz? Mesela..
+Ben olsam şöyle yaparım. Bir kere muayeneleri koyarım tamam mı? Bunlar bu saatte gelecek. Belli ne zaman geleceği. Ben biliyorum ne zaman geleceklerini değil mi?
+Schedule'ı var. Bir oda, schedule'ı aldım. O saatlerde getirdim. Onların hepsini x-ray'e gönderdim, önce hepsini gönderirim.
+Bir patlasın x-ray, göreyim onun patladığını. Tamam patlıyor mu patlıyor.
+O service time'ı hesapladım fit ettim, o yüzden orası patlayacak herkesi gönderirsem.
+Patladı saat kaçta patlayacak 9, 9 buçuk gibi yoğunluk başlayacak. Bunu gördüm güzel, ondan sonra dedim ki tamam yüzdesi yüzdesel olarak ayırırım bunları.
+Belli bir yüzdesi oraya gider filan. O zaman bakarım daha mı gerçekçi, azalıyor mu azalmıyor mu. Tamam o da güzel o da azaldığını gördüm.
+Ondan sonra şeye bakarım, walk in eklerim. Sadece bir departman için sadece walk in yaparım, random arrive ederler.
+Bir tek onu print ederim bakalım random arrive ediyor mu gidiyor mu geliyor mu diye.
+Sonra bir walk in bir şey yapınca acaba birbirinin içine giriyor mu diye bakarım. Ekle ekleye gideceksin, temiz olacak.
+Heh o zaman da şey oluyor, ulan burayı yapamıyoruz demek ki bu detayı assume edip geçeceğiz deyip, takıldığın yerlerde düzeltebilirsin.
+Gelişleri önce hesaplayıp.. Hangi service time'lar önce?
+Şimdi TC'nin son iki hamlesi.. şimdi doktora giriyorsun, çağrılma zamanı ışık yandı utku koç diye çağırdı.
+İçeri girdin doktor sana diyor ki tc'nin son iki basamağını söyle tamam söylüyorsun 99, giriyor entera bastığı an hasta kabul saati.
+Muayene başlangıç saati. Hasta kabul saati o.
+O son iki haneyi girmeden hastaneye gelip gelmediğini bilmiyorsun hastanın.
+Çağırmış olabilirsin gelmez, görmemiştir gecikmiştir onu göremezsin ama tc'nin son iki hanesini girdiğinde muayene başlangıç saati olur, reçete varsa reçeteyi girdiği muayene bitiş saati olur.
+Var mı sorusu olan? Evet Tuğba. Şarjım yüzde 8, hızlı.
+Hocam o zaman bizim hedefimiz neyse, randevu alan odaların yoğunluğuna odaklanıyorsak ona göre datayı temizlememiz lazım, doğru mu?
+Doğru, amacın neyse. Röntgen'den dönüşümü ayarlayacaksın röntgen q'sunu mu ayarlayacaksın, yoksa benim amacım şeydi mesela ilk iki odanın önünde bekleyen alan ortak ve çok karmaşık orası, oradaki q'yu minimize etmekti benim kendi düşüncem ilk başta.
+Hangisini diyorsan ona göre yapacaksın.
+Tamamdır hocam çok teşekkür ederim iyi günler.. Rica ederim iyi günler. Sor..
+İki grup data analizi yaptık.. süre bazlı yaptık.. Evet tamam.
+Bir de ratio bazlı yapın, yüzde kaçı x-ray'e gidiyor, çocukların yüzde kaçı, tümörün yüzde kaçı gidiyor..
+Şey yapsak bi de, doktor bazlı yapsak.. doktor bazlı process time.
+Hangi röntgene gönderiyor daha çok, ya da belli bir röntgene.. evet güzel. Aferin.
+Çünkü adam el cerrahisiyse yatarak röntgenine göndermeyecek, öbürüne gönderecek, ayakta çekilene gönderecek iyi günler. Olur çok güzel olur.
+Bunu nasıl kodda uyar... Nasıl, ondan distiribution..
+Şimdi departmana göre yaptın ya, sen röntgenleri tanımlarken, iki tane röntgen resource'u var capacity'si de 2 demeyeceksin de, bir tane ayakta röntgen resource'u tanımlayacaksın bir tane yatarak röntgen resource'u tanımlayacaksın.
+Ve bir de gidiyorsa, belli bir probability ile ayakta röntgene gidecek belli bir probabiltiyle yatarak röntgene gidecek, belli bir probabilityle ikisine gidecek. Tamam?
+Böyle olacak senin extension'ın da, diğer projelere göre bu olacak sizin grubun extension'ı.
+Gerçekte öyle, ama çoğu kişi şey yapacak röntgen resource 2 diyecek basacak geçecek yani.
+Bir grup geldi dedi ki "hocam dedi ikisinde de yandı ismi dedi ikisinin de q'sunda gördüm aynı kişiyi dedi."
+Bir dakika nasıl oluyor dedim gittim sordum ben de doktora.
+O dedi biri ayakta hastalar için dedi biri yatarak röntgen çekilen hastalar için dedi, hızlı olsun diye öyle ayırdık dedi.
+Mesela öyle ayrılmasaydı ne olurdu bi ayakta bi yatarak olsaydı? O zaman process time'ı daha uzun olurdu çünkü ayar yapman gerekiyor.
+Onun process time'ını da atıyorum 30 saniye koy bir dakika koy. Bir bak bakayım o zaman gerçekten q'daki patlamayı görürsün, aradaki farkı görürsün. Bu güzel bir şey olur extension. Okey?
+Teşekkür ederim hocam. Rica ederim.
+Hocam poliklinik, departmanların x-ray'e gönderme oranını önceden inceleyip işte belki randevu almadan direkt x-ray'e gönderme gibi bir..
+Olur güzel. Kontrol hastası ben de onu dedim.

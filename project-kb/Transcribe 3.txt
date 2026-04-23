@@ -1,0 +1,163 @@
+Anladım, hiçbir özetleme veya düzenleme yapmadan ses kaydının dökümünü doğrudan aşağıya ekliyorum:
+
+durum kuyruk yani doktor bekleme sırasında oluşan darboğazı inceleyelim dedik.
+Yani X-ray sırası değil de sadece doktor sırasında oluşan
+sıkışıklığı inceleyelim dedik. Orda iki doktorun aslında iki odanın kuyruğu aynı yerde duruyor, onları toplamanız lazım aslında.
+İkisi aynı yerde duruyor fiziksel olarak.
+Bir oda böyle, bir oda böyle, herkes burada bekliyor. Hocam peki diğer odalar böyle böyle uzak kalıyor hocam. Yani mesela biz baktık galiba bir 10 10'a yakın doktor vardı hocam. Onun üzerinden Hangi iki doktorun yan yana olduğunu bilmiyoruz onu nerden internetten falan. Yok bulamazsınız.
+Üç tane iki tane kalabalık departmanı Tamam
+Tamam hocam.
+Tamamen yan yanaymış gibi seçeceksiniz.
+O kadar başka bir şey yok yani uygunsa ocağımda
+Herkes farklı yapabilir ama gitmeyin başka soruları da dinleyin Tamam.
+Geldik Bizim şeydendi o sorumuz
+Bizim evet. Bu bazı satırlarda çağrılma zamanları boş
+Onları ne yapacağız ya da onlar hakkında bir fikrimiz var mı?
+İşte çağrılma zamanının boş olması şundan kaynaklı.
+kişi randevuyu almıştır çağrılma zamanının oluşması için şu gerekiyor:
+Kişiyi çağırıyorsun
+çağrılma zamanı o. Evet.
+Son çağrılma zamanı
+Çağırılacağı gün
+Biz şey diye düşündük şimdi mesela bazıları randevu almıyor ama kapıdan böyle kafasını uzatıp hocaya soru soruyorlar ya o tarz şeyleri demektir
+Yok randevu yoksa o sistemde görünmezdi randevu var fakat çağırılmamış.
+Sen gidiyorsun mesela kontrole gittin
+Bir şey söylüyorsun içeriye giriyorsun ya şey randevuyu alıyorsun.
+Hocam diyorsun bizim bilmem ne vardı diyorsun. Tamam diyor gel diyor neydi isim diyor bilmem ne. Senin numaranı girmeden ordan çağırmadan
+İşlemi bitiriyor. O ondan.
+Randevusu mesela 3'te oluyor içeriye girmiş 9 buçukta. Randevu oluyor ama sıra almadan giriyor falan.
+Sıra evet çağırılmadan giriyor olabilir. O olabiliyor mu hocam mesela 3'te randevusu alan 9 buçukta girmiş.
+Şöyle randevulardan bazıları randevu değil zaten. Mesela
+her bir X-ray için bir böyle çektik kolu bir böyle röntgen çektik diyelim buna iki tane randevu oluşturmak zorunda sistemde. Evet.
+O yüzden aynı satırdan iki tane üç tane var. Bir böyle fotoğraf bir böyle fotoğraf şeklinde her bir
+Excel'de mesela bir kişinin ismini aynı saatlerde 4-5 kere gördük onun hepsi farklı bir şey mi tekamül ediyor?
+Onun hepsi aslında bir tane şeye tekamül ediyor. Onu temizledik çünkü biz.
+Evet evet sildik
+Onun hepsi aslında başka bir şeye denk geliyor o yüzden
+Daha fazla Excel'den hiç bir şey silmesek de olabiliyor mu şu an
+Bazıları mesela kısaltmış satırları bilmiyorum da biz silmedik çünkü
+Daha zorlanırsınız Kolaylığı şu
+4 geldi 2 4'gen arasındaki süreyi belirleyeceksin bütün datayı yükleme.
+Ama A doktorunun muayene süresini belirleyeceksin bütün dataya ihtiyacın yok
+O doktorla ilgili datayı seçtiğin şeyler.
+Evet
+Ona yönelik de bir şey yapabilirsiniz. Evet
+Görüşürüz
+Hocam Word'de o schedule mevzusunda 3 farklı şey var.
+Onlardan üçünde de Optime mi bir kod yazmamız gerekiyor? Tabi tabi yani öyle bir kod yazacaksın ki işte şu da olsun bu da olsun böyle değiştirebileceksin Değiştir dediğinizde üçünü de kullanabileceğimiz şekilde
+Sen aslında şöyle şu saatte başladım şu kadar dakika mola verdim şu saate kadar bu randevu alıştır diyebilmelisin.
+Üçüncüsünde sanırım şey yazmıyor
+16.00'da bitiyor gibi bir şey yazmıyor. 16.00 falan bitmiyor zaten
+Yani hatırlamıyorum şimdi ama hani gece 11'e kadar devam ediyor zaten. Gece 11'e kadar devam ediyor Randevu devam etmez de
+Neyse
+Çekimler falan devam edebilir
+Çekimler devam edebilir
+Ama şey etmez
+Doktor gider. Evet.
+Hocam bir de doktor doktor seçeceğiz ama mesela örnek veriyorum Kadir doktor Kadir sadece iki kişiye bakmış gibi gözüküyor. Bu nasıl mümkün oluyor hocam?
+O şöyle oluyor şimdi aslında departman oluyor sekreter ben gittim diyorum ki sekreter diyor ki işte Özer'i çağırıyor
+kendi kaydını açıyor ordan giriyor yok o aslında orda yapmamış
+Kendi odasında yapmış
+Normalde randevulu birimi değil o
+Ama kendi odasında yaptığı için o iki tane datayı görüyorsunuz.
+Tamam. Ben geçen gittim doktoruma ama bana dedi ki seni bi kayıt açalım da bi röntgene gönderelim
+Sekreterden kayıt açtık o işlemi yaptı bana bi tane hasta göründü.
+Yani Kadir'in üzerinden açıyor ama oradaki doktor aslında hala
+Böyle de olabilir Kadir kendi de bakmış olabilir o kişiye
+Onu bilemeyiz. Hocam randevu günü çarşamba ama sen salı günü acil geliyorsun Ben bugün gitsem mesela bak desem bana poliklinikte değil ama bakacak ya acilden kayıt açtıracak kendi kayıt açacak
+Şu an o da çıkıyor
+Yani yine de o kuyruk modeline o iki hasta bile olsa iki hastayı sildiniz mi?
+Onu sokmayın Onu sokmayın. Tamam peki durumlarda kayıt kapatmama oluyor mu?
+Çünkü bazı datalarda muayene sonlanma zamanı yok
+Muayenenin sonlanması için reçete verildiyse muayene sonlanma zamanı belli net. Evet.
+Onun dışında reçete vermedi. Tamam dedi git dedi kapatmadı. Kapattım demesi lazım ki. Evet.
+Reçete vermediyse kapatıp kapatmadığını biliyor musun? Kapattım dediyse okey kapatmazsa bazen kapatmayı unutuyor akşam 5'te basıyor.
+Bazen hiç kapatmıyor bazen de yani kapanmaması gerek gerekliyorsa. Hani sen demişsin ki ya tamam bir problem yok ama sen yine de bir röntgen çektir kafan rahat olsun demişsin
+O da demiş ki bakmış röntgende sıra çok bana ne ya uğraşamam demiş çekmiş gitmiş. Kapanmamış o zaman.
+Tamam. Teşekkür ederiz.
+Hocam bizim birkaç tane sorumuz var. Şimdi öncelikle muayene kabul saati bizim hastaneye ilk adım atıp yani randevulu geldik zaten numara alıp kayıt yaptırdığımız an değil mi? Hastaneye varış mı? Değil mi?
+Muayene kabul ne oluyor?
+Muayene kabul zamanı şöyle şimdi çağrılma zamanı seni en son ne zaman işte orda orda kod yazıyor. Hı hı.
+En son ne zaman çağrıldığın orda. 3 kere çağrıldıysan sonuncusu var bir iki ikinci yok. Tamam. Bi yerde tutulmuyor. Hı hı.
+Muayene kabul zamanı içeri girdim sana soruyor diyor ki TC'nin son 2 basamağını söyler misin? Hı hı. Sen diyorsun işte 99 Hı hı. 99 diyor enter diyor muayene kabul zamanı O zaman hocam muayene süresi yani muayene kabulden başlayacak mesela sonlandırmaya kadar muayene kabulle sonlandırma arasındaki süreç bizim muayene sürecimiz. Değil mi?
+Yok.
+Ama çıkış çıktığı saati bilmiyoruz
+Çıktığı saat bir sonraki hastanın muayene kabul saati. Hı. Peki şey arrival'ları bulmak için çağrılma zamanlarını mı baz alacağız? Randevu saati ve çağrılma zamanı arasındaki farka mı bakacağız arrival rate'i bulmak için?
+Yok şimdi walk in gelenler arrival'da
+randevu gene yazılıyor oraya bi saat yazılıyor orda
+çok farklı bir saat yazılıyor gece 11 yazılıyor
+O aslında şey
+Muhtemelen walk in oraya bi saat koymak zorunda koyuyor sistem bi saat koyuyor ordan olabilir
+Ama çağrılma zamanıyla onu ayırt etmek mümkün değil Şunu yapabilirsin doktorun muayene saatlerini görürsün 8 8 10 8 20 8 30 8 40 8 40'ta 3 tane var. Başka hastalar ha bunlar şey
+Bunlar walk in diyebilirsin.
+Öyle walk in'i bulmak o kadar kolay değil. 1, İkincisi 3 tane muayene süresi var.
+Hiç X-ray'e gitmeyecekse bir muayene süresi var.
+X-ray'e gidecekse iki muayene süresi var. X-ray öncesi ve X-ray sonrası yani 3 distribition var.
+Peki bu hastaları dört tip hasta vardı ya walk in randevulu tümör kontrol hastaları dörde ayırmamız gerekiyor mu yoksa walk in ve randevulu ayırmamız yeter mi?
+Her departman için bir randevulu var bir walk in var
+Tümörün özelliği bütün walk in'leri kabul ediyor. Çocuğun özelliği hiçbir walk in kabul etmiyor. Kabul etmiyor. Kontrolün özelliği hiç randevulu yok
+Hepsi walk in.
+Biz dördünü de değerlendirmek zorunda mıyız? Yani assumption yapıp sadece mesela tümöre bakmadıysak diyelim o departmana yani
+Yok 7 oda olacak zaten 7 odaya bir şeyler vereceksin. Hı hı.
+Bazılarında walk in bazılarında sadece randevu bazılarında ikisi birden olması lazım.
+Peki şey saat 5'ten sonra olan bu çağrılma zamanları ya da saat 5'ten sonra olan şeylere aslında biz walk in olarak direkt assumption yapabilir miyiz? Yapabilirsin.
+Tamam. Hatta 4'ten sonraya da yapabilirsin.
+Mesai bitimi 4 olarak alırsak.
+Bir de hemen bakıyorum. Çağrılma zamanı arkadaş da sormuş zaten %28'i eksik verilen hocam yani onu bir yerde hiç kullanmadan da Sürekli tekrar tekrar ediyor ya da çağrılmadan giriyor içeriye Onları ne yapacağız Evet yani çok boşluk var Bak datayı silmek değil dediğim gibi nerede kullanacağına bağlı. Röntgen'de kullanacaksan röntgenle ilgisi olmayan röntgene girmeyenin datasını kullanmayacaksın zaten yani silmene gerek yok. Hı hı.
+Ya da kaç tane röntgen çekiliyor ortalamada diye bakacaksan o zaman işte o dublikeleri sayacaksın. Başka bir şeye gerek yok. Şey diye bir şey yok benim anladığım kadarıyla 12.000 datanın belli bir kısmını silip sonra genel analizlere başlamak diye bir şey yok aslında soruma cevap bulmak için Küçülteceğim Küçülteceksin Bence doğru ben olsam öyle yapardım Ama şunu da yapabilirsin Herkesin yolu farklı olduğu için Herkesin yolu farklı olduğu için de silin yani mesela arkadaşlar iki hastayı yan yana yapıyorlar ve bir tek sıra kullanıyorlar yani onlar ona göre yapacak benimki farklı olduğu için ona göre yapacağım Orda benim kendime yol Bir havuzdan aradığının cevabını bulacaksın sadece Tam olarak öyle Bir havuzdan aradığının cevabını bulup bulabildiğim kadar yapacaksın
+Bununla ilgili şeyi de soracaktım dediniz ya bu SQL'den çekerken 4 tane mesela aynı hastanın adı oluyor bu sefer bi en erken işte randevu saati en erken çağrılma saati ve sonlandırma saati olanı tek satır olarak alıp o dördü teke düşürmek Olabilir Olabilir değil mi Çünkü öyle yaptığımızda mesela 12.000 satırdan 1900 satıra indi data sadece dublikeleri silince yani bu doğru mudur bu bunların üstünden hep biz şey distribution'lara falan baktık mesela Makul bir sayı 1900 Ha 1900 makul Tamam da o daha iyi. 1900 makul bir sayı Bir de hocam şey randevu saati eksi bir saniye hemen bakıyorum hı randevu saati eksi muayene kabulle arrival hesaplamıştık biz yanlış mı oluyor o zaman?
+Randevu saatinden ne kadar önce geldi ne kadar sonra geldiye bakmak için.
+Onu hesap ne kadar önce geldiğini belirleyemezsin. Hı.
+Çünkü gelip dışarıda bekliyordur
+Ama onu kaydetmem mümkün değil Normalde onu şey bir dosya yükledi herhalde
+Ahmet yiğit
+En son report şeklinde yüklendi o kadar
+Bir dosya yok Çünkü normalde data toplamaya gittiğin zaman sen aslında
+hastanın gelişiyle
+randevusundan ne kadar önce gelmiş onu tespit edebilirsin. Gerçekten toplaman gereken tek data o Şey sanıyorum randevusu 10 buçukta ama 10'da doktorun odasına gidip şey yapıyor 10'da binaya girmiş
+10'da mı girmiş 20 geçe mi girmiş onu bilemezsin. Onu biz şey peki onu bilmeden nasıl Q'yu bulacağız? Kliniğin önünde bekleyen Q'yu. Bir varsayım yapabilirsiniz. 10 dakika önce ile 5 dakika sonra arası
+Çünkü saatine de bağlı. Hı hı.
+İşte çoğunlukla erken gelir insanlar
+10 dakika önce ile 5 dakika sonra arası işte triangular random variable yapabilirsin.
+Bir de hocam dosyada 3 tane röntgen var ya siz derste hep 2 röntgenden bahsettiniz biz Şimdi normalde orda 4 tane röntgen odası var. Evet.
+2 tanesi poliklinikler için
+Bu bizim ilgilendiğimiz
+1 tanesi öbür blokta C blokta skolyoz için kullanılıyor. Hı hı.
+O bizi ilgilendirmiyor çünkü zaten 3 dedin ya Hı hı.
+Bir tanesi çok az Evet 160 olan yani 4-5 kişi falan var. O skolyoz o başka binada onu katmamıza gerek yok Tamam
+1 tane de acilde röntgen var.
+Hı hı. Onla ilgili hiç yok zaten veri O da O da acilin röntgeni. O zaman bu 160 olan röntgen numarası onu silebilir miyiz datadan? Tamam.
+Bir de bu çocuk polikliniğine gelen birden fazla kişi olması vardı ya hani sırada bekleyenler gibi bu assumption'ı yapmak zorunda mıyız yoksa sabit bir sayıyla mı yapalım bunu? Kesin.
+Yani şunu diyebilirsin işte çocuk polikliniğine ortalama çocuk polikliniğine gelenler 3 kişi geliyor diyebilirsin. Tamam. Hasta artı iki diyebilirsin otomatik
+Bir şey biz bu kuyruk sırasını inceleyeceğimiz için mesela bazı hastalar randevu almış fakat gelmemiş. Onlar bizim kuyruğumuza etki etmez. Yok. Yok randevu alan herkesin geldiğini varsayabilirsiniz. Çünkü randevu alıp no show yaptığın zaman önümüzdeki 15-20 gün bir daha randevu alamıyorsun ya Tamam.
+O yüzden onu baya ciddiye alıyorlar. Tamam. Tamam?
+Hatta böyle yarın randevum var aa falan gelmeyeceksen hemen haber verdin verdin. Randevuluların hepsi gelecek değil mi hocam Evet randevuluların hepsi gelecek diye varsayabilirsiniz.
+Bizim başka sorumuz yok. Hocam ben göstererek soracaktım da Kodu yazarken Anlatamıyorum mu Yoksa anlamazsınız mı diyorsun anlamıyorum ne diyeceksin Çok dosya dosyaları oluştursak base class gelip değerleri buralardan alsa
+Tamam Hocam bunu demoda labda açabilir miyiz peki Böyle Bunu değil yani bu şimdi şey labda ben şeyden açmanızı bekliyorum labdaki bilgisayarı kullanmanızı isteyeceğim. Evet. Tamam?
+O labdaki bilgisayarı açıp kullanabiliyorsan okey Tabii okey
+Yani benim yazdığım base class parametreye gelip burdan bunu burdan alması okey Sorun değil nasıl yaparsan. Tamam.
+Yani otomatize etmişsindir buraya 3 yazınca şunu yapıyor 5 yazınca bunu yapıyor demişsindir. 3'ü 5'i yazarsın run edersin okey. Hı hı.
+Yani şöyle düşün ne kadar fazla detay yaptıysan benim sorduğum soruda demoda ha biz bunu zaten yapmıştık buna benzer bir şey diyip düzeltmen daha hızlı olur. Ne kadar az şey yaptıysan o daha zor olur. N'oldu daha fazla detaya girmek için ya da sistemi iyi anlamanız için motive etmiş oldum sizi
+Biraz zorlandı ama Tamam Teşekkür ederiz. Son bir şey soracaktım Tabii ki Çağrıl Muayene kabul eksi çağrılma zamanı yaparak bekleme odasındaki süreyi kabul edebilir miyiz?
+Muayene kabul eksi çağrılma Bir kişi çağrıldıktan sonra içeri ne kadar sürede girdiğini hesaplamış oluyorsun
+Aslında
+bu süre hiçbir yerde yok.
+Evet.
+Hiçbir yerde yok. Bunu yapmak iyi bir şey. Hı. Tamam. Çünkü çağırdığı anda muayene simülasyon tarafından düşünelim next patient hemen o çıkar çıkmaz giriyor değil mi işi tık diye giriyor. Gerçekte öyle mi? Evet. Değil. Değil.
+Şeyi girdi
+muayeneyi sonlandırdı düğmeye bastı bi kere zaten muayeneyi sonlandırmayla çağrılma arasında da bi zaman olabilir. Evet. Çünkü herkes hemen çıkmıyor. Evet. Reçeteyi yazdın gitmiyor hasta. N'apcan kovalayacak mısın? Yok. Bi süre sonra basıyorsun çağırmaya. Çağırmada da herkes böyle hani kapıda diri böyle zırt diye atlamıyor sıra bana geldi diye biraz dışarıda bekliyor
+Numaran yandı gidiyorsun işte 30 saniye sürer gene girişin
+Şimdi 2000 hasta var 30 saniyeden 1000 dakika eder toplamda Hiç bir yere yedirmediğimiz proses time Mesela bunu geçen sene düşünen olmamıştı Evet bu sene oldu bak Bu sene ekmek çıkar Çıkar çıkar çok şey var arkadaşlar yani sistem o kadar karmaşık ki
+İlla bir yerde simplification yapacaksın.
+Mesela şunu diyebilirsin arkadaş çağrıldığı zaman girer içeri bitti
+Diyebilirsin. Aslında kodu ne kadar biz kendimiz karmaşık ve her şeyi ekleyerek yazarsak sizin sorduğunuz sorularda bizim sadece değiştirmemiz gereken şeyler değerler oluyor. Ama eğer ne kadar az yazarsak siz bir şey istediğinizde bizim sıfırdan bazen kod eklememize de gerekiyor olabilir. Evet olabilir ama şey yani şeyi istemiyorum yani bütün detaylara girin değil. Belli bir detaya kadar sistem iyileşir belli bir detaydan sonra kötüleşir. Evet. Daha fazla detay vermenize gerek yok. Anladım o sınırı kendiniz belirleyeceksiniz. Normalde belli bir seviyeden fazla detay istemiyoruz. Evet. Hocam hangi şeyleri parametreleri bir dağılımla uydurmamız gerekiyor? Mesela yanlış yapmışım gerçi de randevu eksi şey neydi kabul yapmıştım o yanlış bir şey mesela uymamıştı. Ama x-ray bekleme süresini işte gamma'ya falan uydurmuştum yani X-ray bekleme süresini yapamazsın. X-ray bekleme süresi input variable değil output variable.
+Neden? Burada şey Excel'den alabiliyoruz
+Alabiliyorsun ama o bir output verisi 7 yaşından küçüğü direkt giriyor 65'in üstü direkt giriyor Yok hayır o anlamda değil şimdi senin o röntgeni nasıl dizayn ettiğinle queueing sistemiyle arrival'a göre Q'da bekleme süresi değişir. Kontrol edilebilen bir şey. O bizim target variable Kontrol edilebilir demiyorum da etkilenen variable bağımlı değişken Peki ne kadar sıklıkla randevu alıyorsun o bağımsız değişken onu Ya da işte walk-in'lerin inter arrival time ya da service time take service time service time 1 service time 2 dublelerde bunlar input data analizi yapabileceğin şeyler.
+Hocam mesela şöyle göstereyim yani bunlardan hangisi uyuyor uymuyor şeyden anlatsam bir saniye hı
+Mesela x rate output'sa peki biz x-ray arrival rate'ini bu datadan mesela varsayım yaparak atıyorum %58 çıktı x-ray'e muayene olan hasta oranı ben bunu simülasyona girdi olarak verebiliyor muyum bu bir input olabiliyorsa nasıl beklemek Bekleme süresi olmaz. Yani burdaki Şimdi bir tane daha x-ray olsaydı bekleme süresi değişecekti değil mi? Evet. Decision variable'ı değiştirdiğin zaman bekleme süresi otomatik değişiyor.
+O yüzden input değil Bizim design'ımıza göre şekillenen bir veri Evet O input variable değil Peki input analiz kısmında bu ks ks testlerle yapmamız gereken bir test varsa hangi parametreler üzerinden bunu yapmamız lazım? Service time olur doktorun service time'ı olur ve inter arrival time olur walk in'ler için.
+Ya da x-ray service time olur
+x-ray service time'la o hıhı tamam
+Şey gibi çok uç bir örnek olur mu bilmiyorum da biz yeni bir x-ray eklersek o bekleme süresi düşer
+Ama yeni bir x-ray eklersek talebi arttırıp inter arrival time artmaz doktorun service time'ı artmaz. 1 x-ray'de geçen service time artmaz değişmez. Aynen O senin decision variable'ına bağlı veya input'una bağlı değil Değil onlar işte bizim input analizinde kullanacağımız şeyler.
+Bu kadar hocam Teşekkür ederiz Biz teşekkür ederiz İyi çalışmalar
