@@ -66,6 +66,10 @@ SECONDARY_MAX_MINUTES = 10.0
 # Tukey IQR rule for outlier removal before distribution fitting
 DEFAULT_IQR_FACTOR = 1.5
 
+# Max consecutive ``CEKIM_ZAMANI`` gap (minutes) treated as back-to-back service;
+# larger gaps are idle / lunch and do not define per-row imaging service.
+XRAY_INTERDEPARTURE_MAX_MINUTES = 15.0
+
 
 @dataclass
 class CleaningLog:
@@ -337,7 +341,9 @@ def add_derived_columns(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.
       until the doctor either asks for an X-ray or closes the case. After
       :func:`drop_impossible_durations`, :func:`mask_initial_screening_iqr_outliers`
       masks Tukey-IQR outliers on this column only.
-    - ``xray_wait_time``: from X-ray request to first shot.
+    - ``xray_wait_time``: total minutes from X-ray request to first shot
+      (**queue wait + imaging service**). See :func:`add_xray_wait_decomposed`
+      for ``xray_queue_wait_time`` and ``xray_service_time_implied``.
     - ``secondary_screening_time``: from the *second* call (``CAGRILMA_ZAMANI``)
       until close. Per the updated plan we isolate the ``[2, 10]`` minute
       window so we are measuring the real post-X-ray doctor contact and not
@@ -370,6 +376,90 @@ def add_derived_columns(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.
     if log is not None:
         note = ", ".join(f"{k}: {v} negatives -> NaN" for k, v in negative_counts.items())
         log.record("add_derived_columns", len(df), len(df), note=note)
+    return add_xray_wait_decomposed(df, log=log)
+
+
+def add_xray_wait_decomposed(
+    df: pd.DataFrame,
+    log: CleaningLog | None = None,
+    max_gap_minutes: float = XRAY_INTERDEPARTURE_MAX_MINUTES,
+) -> pd.DataFrame:
+    """Split request-to-shot time into queue wait vs implied imaging service.
+
+    ``CEKIM_ZAMANI - TETKIK_ISTEK_SAATI`` equals waiting (queue + walk) plus
+    time the modality spends on this patient's imaging. Following the same
+    consecutive-shot logic as :func:`xray_interdeparture_times`, the gap from
+    the previous ``CEKIM_ZAMANI`` to this row's shot—within
+    ``(xray_room_type, day)`` and with ``0 < gap <= max_gap_minutes``—is taken
+    as **this row's** implied service minutes. Then
+    ``xray_queue_wait_time ≈ xray_wait_time - xray_service_time_implied``.
+
+    The first shot in a daily chain (or any gap above the threshold) leaves
+    ``xray_service_time_implied`` as NaN and therefore ``xray_queue_wait_time``
+    as NaN. Requires ``xray_room_type`` from :func:`tag_xray_room`.
+    """
+
+    df = df.copy()
+    df["xray_service_time_implied"] = np.nan
+    df["xray_queue_wait_time"] = np.nan
+
+    if "xray_room_type" not in df.columns:
+        if log is not None:
+            log.record(
+                "add_xray_wait_decomposed",
+                len(df),
+                len(df),
+                note="skipped: no xray_room_type column",
+            )
+        return df
+
+    sel = (
+        df["TETKIK_ISTEK_SAATI"].notna()
+        & df["CEKIM_ZAMANI"].notna()
+        & df["xray_room_type"].isin(["standing", "laying"])
+    )
+    if not sel.any():
+        if log is not None:
+            log.record(
+                "add_xray_wait_decomposed",
+                len(df),
+                len(df),
+                note="no rows with tetkik+cekim+standing/laying",
+            )
+        return df
+
+    sub = df.loc[sel].copy()
+    sub["_d"] = sub["CEKIM_ZAMANI"].dt.date
+    sub = sub.sort_values(["xray_room_type", "_d", "CEKIM_ZAMANI"])
+    prev_cekim = sub.groupby(["xray_room_type", "_d"], sort=False)["CEKIM_ZAMANI"].shift(1)
+    gap_min = (sub["CEKIM_ZAMANI"] - prev_cekim).dt.total_seconds() / 60.0
+    valid = (gap_min > 0) & (gap_min <= max_gap_minutes) & prev_cekim.notna()
+    implied = np.where(valid.to_numpy(), gap_min.to_numpy(), np.nan)
+
+    tot = (sub["CEKIM_ZAMANI"] - sub["TETKIK_ISTEK_SAATI"]).dt.total_seconds() / 60.0
+    tot = np.where(tot >= 0, tot, np.nan)
+    queue = tot - implied
+    queue = np.where(
+        np.isfinite(implied) & np.isfinite(tot) & (queue >= 0),
+        queue,
+        np.nan,
+    )
+
+    df.loc[sub.index, "xray_service_time_implied"] = implied
+    df.loc[sub.index, "xray_queue_wait_time"] = queue
+
+    if log is not None:
+        n_implied = int(np.isfinite(implied).sum())
+        n_queue = int(np.isfinite(queue).sum())
+        log.record(
+            "add_xray_wait_decomposed",
+            len(df),
+            len(df),
+            note=(
+                f"implied service: {n_implied} rows; queue wait: {n_queue} rows "
+                f"(max_gap={max_gap_minutes} min)"
+            ),
+        )
     return df
 
 
@@ -385,11 +475,15 @@ def drop_impossible_durations(df: pd.DataFrame, log: CleaningLog | None = None) 
     duration_cols = [
         "initial_screening_time",
         "xray_wait_time",
+        "xray_service_time_implied",
+        "xray_queue_wait_time",
         "secondary_screening_time",
         "total_system_time",
     ]
     masked = {}
     for col in duration_cols:
+        if col not in df.columns:
+            continue
         series = df[col]
         if series.notna().sum() == 0:
             continue
@@ -656,6 +750,7 @@ def load_and_clean(
     df = drop_room_160(df, log)
     df = flag_call_time_anomaly(df, log)
     df = flag_open_case(df, log)
+    df = tag_xray_room(df)
     df = add_derived_columns(df, log)
     df = drop_impossible_durations(df, log)
     df = mask_initial_screening_iqr_outliers(df, log=log)
@@ -663,11 +758,7 @@ def load_and_clean(
     df = map_department(df, doctor_to_department, log)
     df = apply_department_patient_type_rules(df, log)
     df = anonymize_doctor(df, log)
-    df = tag_xray_room(df)
     return df, log
-
-
-XRAY_INTERDEPARTURE_MAX_MINUTES = 15.0
 
 
 def xray_interdeparture_times(
