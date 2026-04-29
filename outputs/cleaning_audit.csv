@@ -7,7 +7,8 @@ drop_room_160,1920,1862,58,Removed 58 scoliosis rows (room suffix 160).
 flag_call_time_anomaly,1862,1862,0,Masked 583 call-time values that were overwritten after X-ray.
 flag_open_case,1862,1862,0,Flagged 149 open cases (no examination end time). Kept for arrival/routing stats.
 add_derived_columns,1862,1862,0,"initial_screening_time: 38 negatives -> NaN, xray_wait_time: 0 negatives -> NaN, secondary_screening_time: 0 negatives -> NaN, total_system_time: 3 negatives -> NaN"
-drop_impossible_durations,1862,1862,0,initial_screening_time: >455.47m -> NaN (0 rows); xray_wait_time: >448.62m -> NaN (1 rows); secondary_screening_time: >27.74m -> NaN (0 rows); total_system_time: >636.13m -> NaN (0 rows)
+add_xray_wait_decomposed,1862,1862,0,implied service: 954 rows; queue wait: 932 rows (max_gap=15.0 min)
+drop_impossible_durations,1862,1862,0,initial_screening_time: >455.47m -> NaN (0 rows); xray_wait_time: >448.62m -> NaN (1 rows); xray_service_time_implied: >39.09m -> NaN (0 rows); xray_queue_wait_time: >297.5m -> NaN (1 rows); secondary_screening_time: >27.74m -> NaN (0 rows); total_system_time: >636.13m -> NaN (0 rows)
 mask_initial_screening_iqr_outliers,1862,1862,0,"fence [ 0, 11.06 ] min (factor=1.5); masked 179 of 1694 values"
 classify_walkin_vs_appointment,1862,1862,0,"patient_type counts: {'appointment': 1070, 'walkin': 792}"
 map_department,1862,1862,0,"Top primary departments: {'AdultHipKnee': 805, 'ShoulderSports': 311, 'ChildOrtho': 236, 'BoneCyst': 203, 'Spine': 167, 'KneeMeniscus': 64, 'Control': 59, 'BoneDeformity': 17}; rows whose doctor spans >1 specialty: 711"
