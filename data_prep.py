@@ -68,7 +68,7 @@ DEFAULT_IQR_FACTOR = 1.5
 
 # Max consecutive ``CEKIM_ZAMANI`` gap (minutes) treated as back-to-back service;
 # larger gaps are idle / lunch and do not define per-row imaging service.
-XRAY_INTERDEPARTURE_MAX_MINUTES = 15.0
+XRAY_INTERDEPARTURE_MAX_MINUTES = 25.0
 
 
 @dataclass
@@ -335,12 +335,20 @@ def _to_minutes(delta: pd.Series) -> pd.Series:
 
 
 def add_derived_columns(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
-    """Derive the four duration variables we care about, in minutes.
+    """Derive the duration variables we care about, in minutes.
 
-    - ``initial_screening_time``: from accept-into-exam (``MUAYENE_KABUL_ZAMANI``)
-      until the doctor either asks for an X-ray or closes the case. After
-      :func:`drop_impossible_durations`, :func:`mask_initial_screening_iqr_outliers`
-      masks Tukey-IQR outliers on this column only.
+    The first-exam duration is split by routing path so the SimPy model can
+    sample the right service distribution per branch:
+
+    - ``initial_screening_time``: **X-ray path only** — from accept-into-exam
+      (``MUAYENE_KABUL_ZAMANI``) until the doctor asks for an X-ray
+      (``TETKIK_ISTEK_SAATI``). NaN for patients without an X-ray request.
+    - ``single_screening_time``: **no-X-ray path only** — from accept-into-exam
+      until either the case closes (``MUAYENE_SONLANDIRMA_ZAMANI``) or the next
+      patient is admitted on the same ``(GIRIS_TARIHI, DOKTOR_ADI)``, whichever
+      comes first. The next-patient fallback treats each doctor as a
+      single-server queue (per the IE 304 modelling rule). NaN for patients
+      with an X-ray request.
     - ``xray_wait_time``: total minutes from X-ray request to first shot
       (**queue wait + imaging service**). See :func:`add_xray_wait_decomposed`
       for ``xray_queue_wait_time`` and ``xray_service_time_implied``.
@@ -349,15 +357,40 @@ def add_derived_columns(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.
       window so we are measuring the real post-X-ray doctor contact and not
       picking up overwritten-call artefacts.
     - ``total_system_time``: end-to-end time in the system.
+
+    After :func:`drop_impossible_durations`,
+    :func:`mask_initial_screening_iqr_outliers` masks Tukey-IQR outliers on
+    ``initial_screening_time`` and ``single_screening_time`` separately so each
+    branch's outlier fence is computed from its own distribution.
     """
 
     df = df.copy()
+    df = df.sort_values(["GIRIS_TARIHI", "MUAYENE_KABUL_ZAMANI"]).reset_index(drop=True)
     negative_counts = {}
 
-    xray_end_or_close = df["TETKIK_ISTEK_SAATI"].fillna(df["MUAYENE_SONLANDIRMA_ZAMANI"])
-    initial = xray_end_or_close - df["MUAYENE_KABUL_ZAMANI"]
-    df["initial_screening_time"] = _to_minutes(initial)
-    negative_counts["initial_screening_time"] = int((initial.dt.total_seconds() < 0).sum())
+    df["NEXT_PATIENT_KABUL"] = (
+        df.groupby(["GIRIS_TARIHI", "DOKTOR_ADI"])["MUAYENE_KABUL_ZAMANI"].shift(-1)
+    )
+
+    has_xray = df["TETKIK_ISTEK_SAATI"].notna()
+
+    # X-ray path: end timestamp is the X-ray request itself.
+    initial_xray = df["TETKIK_ISTEK_SAATI"] - df["MUAYENE_KABUL_ZAMANI"]
+    initial_xray_min = _to_minutes(initial_xray)
+    df["initial_screening_time"] = initial_xray_min.where(has_xray)
+    negative_counts["initial_screening_time"] = int(
+        (initial_xray.dt.total_seconds() < 0).sum()
+    )
+
+    # No-X-ray path: end timestamp is the case-close, falling back to the next
+    # admit on the same doctor/day when MUAYENE_SONLANDIRMA_ZAMANI is missing.
+    single_end = df["MUAYENE_SONLANDIRMA_ZAMANI"].fillna(df["NEXT_PATIENT_KABUL"])
+    single = single_end - df["MUAYENE_KABUL_ZAMANI"]
+    single_min = _to_minutes(single)
+    df["single_screening_time"] = single_min.where(~has_xray)
+    negative_counts["single_screening_time"] = int(
+        ((~has_xray) & (single.dt.total_seconds() < 0)).sum()
+    )
 
     xray_wait = df["CEKIM_ZAMANI"] - df["TETKIK_ISTEK_SAATI"]
     df["xray_wait_time"] = _to_minutes(xray_wait)
@@ -474,6 +507,7 @@ def drop_impossible_durations(df: pd.DataFrame, log: CleaningLog | None = None) 
     df = df.copy()
     duration_cols = [
         "initial_screening_time",
+        "single_screening_time",
         "xray_wait_time",
         "xray_service_time_implied",
         "xray_queue_wait_time",
@@ -504,48 +538,46 @@ def mask_initial_screening_iqr_outliers(
     *,
     factor: float = DEFAULT_IQR_FACTOR,
 ) -> pd.DataFrame:
-    """Set ``initial_screening_time`` to NaN outside Tukey IQR fences.
+    """Set first-exam durations to NaN outside Tukey IQR fences.
 
-    Fences use every finite, non-negative screening duration (zeros included).
-    Runs after :func:`drop_impossible_durations` so gross data-entry spikes are
-    already removed before quartiles are computed.
+    Applies independent fences to ``initial_screening_time`` (X-ray path) and
+    ``single_screening_time`` (no-X-ray path) so each branch's outlier cutoff
+    reflects its own distribution rather than a pooled one. Fences use every
+    finite, non-negative duration (zeros included). Runs after
+    :func:`drop_impossible_durations` so gross data-entry spikes are already
+    removed before quartiles are computed.
     """
 
     df = df.copy()
-    col = "initial_screening_time"
-    if col not in df.columns:
-        return df
+    notes: list[str] = []
+    for col in ("initial_screening_time", "single_screening_time"):
+        if col not in df.columns:
+            continue
+        arr = df[col].to_numpy(dtype=float)
+        valid = arr[np.isfinite(arr) & (arr >= 0)]
+        n_in = int(valid.size)
+        if n_in < 4:
+            notes.append(f"{col}: skipped (n={n_in}<4)")
+            continue
 
-    arr = df[col].to_numpy(dtype=float)
-    valid = arr[np.isfinite(arr) & (arr >= 0)]
-    n_in = int(valid.size)
-    if n_in < 4:
-        if log is not None:
-            log.record(
-                "mask_initial_screening_iqr_outliers",
-                len(df),
-                len(df),
-                note=f"skipped (n={n_in}<4 finite non-negative values)",
-            )
-        return df
-
-    q1, q3 = np.quantile(valid, [0.25, 0.75])
-    iqr = float(q3 - q1)
-    lower = max(float(q1 - factor * iqr), 0.0)
-    upper = float(q3 + factor * iqr)
-    outside = np.isfinite(arr) & ((arr < lower) | (arr > upper))
-    n_mask = int(outside.sum())
-    df.loc[outside, col] = np.nan
+        q1, q3 = np.quantile(valid, [0.25, 0.75])
+        iqr = float(q3 - q1)
+        lower = max(float(q1 - factor * iqr), 0.0)
+        upper = float(q3 + factor * iqr)
+        outside = np.isfinite(arr) & ((arr < lower) | (arr > upper))
+        n_mask = int(outside.sum())
+        df.loc[outside, col] = np.nan
+        notes.append(
+            f"{col}: fence [{lower:.4g}, {upper:.4g}] min "
+            f"(factor={factor}); masked {n_mask} of {n_in}"
+        )
 
     if log is not None:
         log.record(
             "mask_initial_screening_iqr_outliers",
             len(df),
             len(df),
-            note=(
-                f"fence [ {lower:.4g}, {upper:.4g} ] min (factor={factor}); "
-                f"masked {n_mask} of {n_in} values"
-            ),
+            note="; ".join(notes) if notes else "no eligible columns",
         )
     return df
 
@@ -777,7 +809,7 @@ def xray_interdeparture_times(
     ``_date``, ``xray_room_type``, ``CEKIM_ZAMANI``, ``interdeparture_minutes``,
     ``is_service_sample`` (``True`` iff ``0 < gap <= max_gap_minutes``).
     The raw gaps are preserved so the notebook can plot the full histogram
-    and visually defend the 15-minute threshold.
+    and visually defend the 25-minute threshold.
     """
 
     keep_rooms = ("standing", "laying")
