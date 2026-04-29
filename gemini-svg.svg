@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1750" width="100%" height="100%">
+    <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+        </marker>
+        <marker id="arrow-priority" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#d32f2f" />
+        </marker>
+
+        <style>
+            .box { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; rx: 8; ry: 8; }
+            .decision { fill: #fff3e0; stroke: #f57c00; stroke-width: 2; }
+            .priority-box { fill: #ffebee; stroke: #d32f2f; stroke-width: 3; rx: 8; ry: 8; stroke-dasharray: 5,5; }
+            .end-box { fill: #e8f5e9; stroke: #388e3c; stroke-width: 2; rx: 8; ry: 8; }
+            .text-main { font-family: Arial, sans-serif; font-size: 15px; fill: #111; text-anchor: middle; font-weight: bold; }
+            .text-sub { font-family: Arial, sans-serif; font-size: 13px; fill: #444; text-anchor: middle; }
+            .label { font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; fill: #333; }
+            .label-red { font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; fill: #d32f2f; }
+            .line { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+            .line-priority { stroke: #d32f2f; stroke-width: 2; fill: none; marker-end: url(#arrow-priority); }
+            .legend { font-family: Arial, sans-serif; font-size: 13px; fill: #333; }
+        </style>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa" />
+
+    <rect x="20" y="20" width="480" height="260" fill="white" stroke="#ccc" rx="4" ry="4" />
+    <text x="260" y="60" class="text-main" text-anchor="middle">Legend &amp; Rules</text>
+    <circle cx="60" cy="95" r="6" fill="#e3f2fd" stroke="#1976d2" />
+    <text x="85" y="100" class="legend">Standard Process</text>
+    <circle cx="60" cy="125" r="6" fill="#ffebee" stroke="#d32f2f" stroke-dasharray="2,2"/>
+    <text x="85" y="130" class="legend">Priority Queue / Routing</text>
+    <text x="45" y="165" class="legend" font-weight="bold" fill="#1976d2">Queue Discipline: Priority + FIFO</text>
+    
+    <text x="45" y="200" class="label-red" text-anchor="start">System State Assumptions:</text>
+    <text x="45" y="225" class="legend" text-anchor="start">• Lunch (12-1 PM): Queues hold, active service completes.</text>
+    <text x="45" y="250" class="legend" text-anchor="start">• End of Day (4 PM): Overtime until empty.</text>
+
+    <g transform="translate(500, 0)">
+        <rect x="110" y="50" width="280" height="70" class="box" />
+        <text x="250" y="80" class="text-main">Appointment Arrivals</text>
+        <text x="250" y="100" class="text-sub">(Schedule: Every 6-10 mins)</text>
+
+        <rect x="710" y="50" width="280" height="70" class="box" />
+        <text x="850" y="80" class="text-main">Walk-in Arrivals</text>
+        <text x="850" y="100" class="text-sub">(Inter-arrival Distribution)</text>
+
+        <polygon points="250,140 360,180 250,220 140,180" class="decision" />
+        <text x="250" y="175" class="text-main">Arrival &gt; 4 PM?</text>
+        <text x="250" y="195" class="text-sub">(Late Rule)</text>
+
+        <rect x="410" y="260" width="280" height="70" class="box" />
+        <text x="550" y="290" class="text-main">Attribute Assignment</text>
+        <text x="550" y="310" class="text-sub">Dept: Tumor, Child, Control</text>
+
+        <polygon points="550,370 670,410 550,450 430,410" class="decision" />
+        <text x="550" y="405" class="text-main">Age ≤ 7 OR</text>
+        <text x="550" y="425" class="text-main">Age ≥ 65?</text>
+
+        <rect x="410" y="490" width="280" height="70" class="priority-box" />
+        <text x="550" y="520" class="text-main" fill="#d32f2f">Initial Screening Queue</text>
+        <text x="550" y="540" class="text-sub">Age Priority, then FIFO</text>
+
+        <polygon points="550,600 660,640 550,680 440,640" class="decision" />
+        <text x="550" y="635" class="text-main">Lunch Break?</text>
+        <text x="550" y="655" class="text-sub">(12 PM - 1 PM)</text>
+
+        <rect x="410" y="720" width="280" height="70" class="box" />
+        <text x="550" y="750" class="text-main">Initial Doctor Screening</text>
+        <text x="550" y="770" class="text-sub">(Combined Assistant Resource)</text>
+
+        <polygon points="550,830 660,870 550,910 440,870" class="decision" />
+        <text x="550" y="865" class="text-main">Needs X-Ray?</text>
+        <text x="550" y="885" class="text-sub">(Dept Probability)</text>
+
+        <rect x="110" y="930" width="280" height="70" class="priority-box" />
+        <text x="250" y="960" class="text-main" fill="#d32f2f">Standing X-Ray Queue</text>
+        <text x="250" y="980" class="text-sub">Tumor/Age Priority, then FIFO</text>
+
+        <rect x="710" y="930" width="280" height="70" class="priority-box" />
+        <text x="850" y="960" class="text-main" fill="#d32f2f">Laying X-Ray Queue</text>
+        <text x="850" y="980" class="text-sub">Tumor/Age Priority, then FIFO</text>
+
+        <polygon points="250,1040 360,1080 250,1120 140,1080" class="decision" />
+        <text x="250" y="1075" class="text-main">Lunch Break?</text>
+        <text x="250" y="1095" class="text-sub">(12 PM - 1 PM)</text>
+
+        <polygon points="850,1040 960,1080 850,1120 740,1080" class="decision" />
+        <text x="850" y="1075" class="text-main">Lunch Break?</text>
+        <text x="850" y="1095" class="text-sub">(12 PM - 1 PM)</text>
+
+        <rect x="110" y="1160" width="280" height="70" class="box" />
+        <text x="250" y="1190" class="text-main">Standing X-Ray Service</text>
+        <text x="250" y="1210" class="text-sub">(X-Ray Tech Resource)</text>
+
+        <rect x="710" y="1160" width="280" height="70" class="box" />
+        <text x="850" y="1190" class="text-main">Laying X-Ray Service</text>
+        <text x="850" y="1210" class="text-sub">(X-Ray Tech Resource)</text>
+
+        <rect x="410" y="1280" width="280" height="70" class="priority-box" />
+        <text x="550" y="1310" class="text-main" fill="#d32f2f">Secondary Screening Queue</text>
+        <text x="550" y="1330" class="text-sub">Return Priority, then FIFO</text>
+
+        <polygon points="550,1390 660,1430 550,1470 440,1430" class="decision" />
+        <text x="550" y="1425" class="text-main">Lunch Break?</text>
+        <text x="550" y="1445" class="text-sub">(12 PM - 1 PM)</text>
+
+        <rect x="410" y="1500" width="280" height="70" class="box" />
+        <text x="550" y="1530" class="text-main">Secondary Screening</text>
+        <text x="550" y="1550" class="text-sub">(Same Combined Resource)</text>
+
+        <rect x="410" y="1610" width="280" height="70" class="end-box" />
+        <text x="550" y="1640" class="text-main" fill="#2e7d32">Departure &amp; Metrics</text>
+        <text x="550" y="1660" class="text-sub">(Record Wait/Queue Stats)</text>
+
+        <path d="M 250 120 L 250 140" class="line" />
+        
+        <path d="M 360 180 L 850 180" class="line" />
+        <text x="380" y="170" class="label" text-anchor="start">Yes (Treat as Walk-in)</text>
+        
+        <path d="M 250 220 L 250 295 L 410 295" class="line" />
+        <text x="260" y="250" class="label" text-anchor="start">No (Standard Time)</text>
+
+        <path d="M 850 120 L 850 295 L 690 295" class="line" />
+
+        <path d="M 550 330 L 550 370" class="line" />
+
+        <path d="M 550 450 L 550 490" class="line-priority" />
+        <text x="565" y="475" class="label-red" text-anchor="start">Yes (High Priority)</text>
+
+        <path d="M 430 410 L 250 410 L 250 525 L 410 525" class="line" />
+        <text x="260" y="400" class="label" text-anchor="start">No (Standard)</text>
+
+        <path d="M 550 560 L 550 600" class="line" />
+        
+        <path d="M 660 640 L 760 640 L 760 525 L 690 525" class="line" />
+        <text x="680" y="630" class="label" text-anchor="start">Yes (Wait)</text>
+        
+        <path d="M 550 680 L 550 720" class="line" />
+        <text x="565" y="705" class="label" text-anchor="start">No</text>
+
+        <path d="M 550 790 L 550 830" class="line" />
+
+        <path d="M 440 870 L 60 870 L 60 1645 L 410 1645" class="line" />
+        <text x="420" y="860" class="label" text-anchor="end">No (Finish)</text>
+
+        <path d="M 550 910 L 550 930" class="line" />
+        <text x="565" y="920" class="label" text-anchor="start">Yes</text>
+
+        <path d="M 550 910 L 250 910 L 250 930" class="line" />
+        
+        <path d="M 550 910 L 850 910 L 850 930" class="line" />
+
+        <path d="M 250 1000 L 250 1040" class="line" />
+        
+        <path d="M 360 1080 L 400 1080 L 400 965 L 390 965" class="line" />
+        <text x="365" y="1070" class="label" text-anchor="start">Yes (Wait)</text>
+        
+        <path d="M 250 1120 L 250 1160" class="line" />
+        <text x="265" y="1145" class="label" text-anchor="start">No</text>
+
+        <path d="M 850 1000 L 850 1040" class="line" />
+        
+        <path d="M 960 1080 L 1020 1080 L 1020 965 L 990 965" class="line" />
+        <text x="965" y="1070" class="label" text-anchor="start">Yes (Wait)</text>
+        
+        <path d="M 850 1120 L 850 1160" class="line" />
+        <text x="865" y="1145" class="label" text-anchor="start">No</text>
+
+        <path d="M 250 1230 L 250 1315 L 410 1315" class="line" />
+        <path d="M 850 1230 L 850 1315 L 690 1315" class="line" />
+
+        <path d="M 550 1350 L 550 1390" class="line" />
+        
+        <path d="M 660 1430 L 760 1430 L 760 1315 L 690 1315" class="line" />
+        <text x="680" y="1420" class="label" text-anchor="start">Yes (Wait)</text>
+
+        <path d="M 550 1470 L 550 1500" class="line" />
+        <text x="565" y="1490" class="label" text-anchor="start">No</text>
+
+        <path d="M 550 1570 L 550 1610" class="line" />
+    </g>
+</svg>
