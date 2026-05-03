@@ -13,27 +13,27 @@ resources:
     laying: 1
 routing:
   xray_probability:
-    AdultHipKnee: 0.6335
-    ShoulderSports: 0.4759
-    ChildOrtho: 0.5424
-    BoneCyst: 0.468
+    AdultHipKnee: 0.6388
+    ShoulderSports: 0.4804
+    ChildOrtho: 0.5494
+    BoneCyst: 0.4745
     Spine: 0.509
-    KneeMeniscus: 0.4688
-    Control: 0.678
-    BoneDeformity: 0.1765
+    KneeMeniscus: 0.4918
+    Control: 0.6897
+    BoneDeformity: 0.2
   xray_room_split:
     AdultHipKnee:
-      standing: 0.5167
-      laying: 0.4833
+      standing: 0.5157
+      laying: 0.4843
     ShoulderSports:
-      standing: 0.7703
-      laying: 0.2297
+      standing: 0.7687
+      laying: 0.2313
     ChildOrtho:
       standing: 0.5312
       laying: 0.4688
     BoneCyst:
-      standing: 0.4842
-      laying: 0.5158
+      standing: 0.4731
+      laying: 0.5269
     Spine:
       standing: 0.6588
       laying: 0.3412
@@ -51,24 +51,24 @@ service_times:
     xray_requested:
       dist: lognorm
       params:
-      - 0.7326506714497744
-      - 0.012517767640014518
-      - 0.8733005168031093
-      ks_p: 0.0712014966843183
-      aic: 1719.3277823891497
-      n: 881
-      n_raw: 908
+      - 0.733826570488182
+      - 0.013298856339893514
+      - 0.8719164078976214
+      ks_p: 0.06824834097110732
+      aic: 1717.413884855304
+      n: 880
+      n_raw: 906
       iqr_filter:
-        n_in: 908
-        n_outliers: 27
+        n_in: 906
+        n_outliers: 26
         q1: 0.5333333333333333
         q3: 1.6833333333333333
         iqr: 1.15
         lower: 0.0
         upper: 3.408333333333333
         factor: 1.5
-        n_before: 908
-        n_after: 881
+        n_before: 906
+        n_after: 880
     by_department:
       Spine:
         initial_screening_xray:
@@ -102,17 +102,17 @@ service_times:
           ks_p: 0.4121383194821896
           aic: 726.6709294035586
           n: 449
-          n_raw: 471
+          n_raw: 470
           iqr_filter:
-            n_in: 471
-            n_outliers: 22
+            n_in: 470
+            n_outliers: 21
             q1: 0.5166666666666667
-            q3: 1.5
-            iqr: 0.9833333333333333
+            q3: 1.4958333333333333
+            iqr: 0.9791666666666666
             lower: 0.0
-            upper: 2.9749999999999996
+            upper: 2.9645833333333336
             factor: 1.5
-            n_before: 471
+            n_before: 470
             n_after: 449
       ShoulderSports:
         initial_screening_xray:
@@ -140,24 +140,24 @@ service_times:
         initial_screening_xray:
           dist: weibull_min
           params:
-          - 1.190560258654516
-          - 0.22855378495601278
-          - 1.0512701380550293
-          ks_p: 0.7462099531867863
-          aic: 132.06749620216067
-          n: 65
-          n_raw: 66
+          - 1.1768671998723805
+          - 0.22898574790770632
+          - 1.0467992830110706
+          ks_p: 0.7064316083323896
+          aic: 130.33030860061174
+          n: 64
+          n_raw: 65
           iqr_filter:
-            n_in: 66
+            n_in: 65
             n_outliers: 1
             q1: 0.6166666666666667
-            q3: 1.9333333333333333
-            iqr: 1.3166666666666667
+            q3: 1.95
+            iqr: 1.3333333333333333
             lower: 0.0
-            upper: 3.908333333333333
+            upper: 3.95
             factor: 1.5
-            n_before: 66
-            n_after: 65
+            n_before: 65
+            n_after: 64
       ChildOrtho:
         initial_screening_xray:
           dist: gamma
@@ -215,24 +215,24 @@ service_times:
     no_xray:
       dist: weibull_min
       params:
-      - 1.9093598470492625
-      - -0.3161618837567895
-      - 5.1805146369392245
-      ks_p: 0.7353330106192943
-      aic: 2604.5252575152463
-      n: 570
-      n_raw: 590
+      - 2.035706795484067
+      - -0.26313738539919485
+      - 5.3105808718990755
+      ks_p: 0.9612798541063106
+      aic: 2471.913910022667
+      n: 547
+      n_raw: 567
       iqr_filter:
-        n_in: 590
+        n_in: 567
         n_outliers: 20
-        q1: 2.4375
-        q3: 6.233333333333333
-        iqr: 3.7958333333333334
+        q1: 2.591666666666667
+        q3: 6.3583333333333325
+        iqr: 3.7666666666666657
         lower: 0.0
-        upper: 11.927083333333332
+        upper: 12.008333333333331
         factor: 1.5
-        n_before: 590
-        n_after: 570
+        n_before: 567
+        n_after: 547
     by_department:
       Spine:
         single_screening_no_xray:
@@ -260,139 +260,139 @@ service_times:
         single_screening_no_xray:
           dist: weibull_min
           params:
-          - 2.101708660094245
-          - -0.2738200876491767
-          - 4.4826079996652535
-          ks_p: 0.9936991481845775
-          aic: 806.5799753831234
-          n: 194
-          n_raw: 203
+          - 2.130937669273061
+          - -0.13086484249233604
+          - 4.421710936669566
+          ks_p: 0.9789885845629169
+          aic: 775.661506072908
+          n: 189
+          n_raw: 198
           iqr_filter:
-            n_in: 203
+            n_in: 198
             n_outliers: 9
-            q1: 2.216666666666667
-            q3: 5.091666666666667
-            iqr: 2.875
+            q1: 2.270833333333333
+            q3: 5.179166666666667
+            iqr: 2.908333333333334
             lower: 0.0
-            upper: 9.404166666666667
+            upper: 9.541666666666668
             factor: 1.5
-            n_before: 203
-            n_after: 194
+            n_before: 198
+            n_after: 189
       ShoulderSports:
         single_screening_no_xray:
-          dist: triang
+          dist: weibull_min
           params:
-          - 0.37926065212501214
-          - -0.8310536201070706
-          - 13.04569195195917
-          ks_p: 0.8582864092000773
-          aic: 617.4064114506564
-          n: 128
-          n_raw: 129
+          - 2.6658820593702273
+          - -1.201151587763307
+          - 7.2697560372595245
+          ks_p: 0.8013838975359528
+          aic: 593.3686263852916
+          n: 124
+          n_raw: 125
           iqr_filter:
-            n_in: 129
+            n_in: 125
             n_outliers: 1
-            q1: 2.9833333333333334
-            q3: 7.116666666666666
-            iqr: 4.133333333333333
+            q1: 3.2
+            q3: 7.15
+            iqr: 3.95
             lower: 0.0
-            upper: 13.316666666666666
+            upper: 13.075000000000001
             factor: 1.5
-            n_before: 129
-            n_after: 128
+            n_before: 125
+            n_after: 124
       BoneCyst:
         single_screening_no_xray:
           dist: triang
           params:
-          - 0.1539604237158097
-          - -0.030433554579978053
-          - 9.832183975081001
-          ks_p: 0.9862891468548187
-          aic: 327.64880371362614
-          n: 77
-          n_raw: 81
+          - 0.13657298682057453
+          - 0.33954867723534476
+          - 9.473211066062937
+          ks_p: 0.9958681617092663
+          aic: 299.6307571516444
+          n: 72
+          n_raw: 76
           iqr_filter:
-            n_in: 81
+            n_in: 76
             n_outliers: 4
-            q1: 1.8666666666666667
-            q3: 5.266666666666667
-            iqr: 3.4
+            q1: 2.25
+            q3: 5.5125
+            iqr: 3.2625
             lower: 0.0
-            upper: 10.366666666666667
+            upper: 10.40625
             factor: 1.5
-            n_before: 81
-            n_after: 77
+            n_before: 76
+            n_after: 72
       ChildOrtho:
         single_screening_no_xray:
           dist: gamma
           params:
-          - 2.8287689609397355
-          - -0.5677360778445197
-          - 1.6485848273269497
-          ks_p: 0.501517231696454
-          aic: 329.4246959776562
-          n: 70
-          n_raw: 72
+          - 3.2613444859616267
+          - -0.5381024795664047
+          - 1.4712610949238831
+          ks_p: 0.3997138575398146
+          aic: 312.30418203375024
+          n: 67
+          n_raw: 69
           iqr_filter:
-            n_in: 72
+            n_in: 69
             n_outliers: 2
-            q1: 2.275
-            q3: 5.9
-            iqr: 3.6250000000000004
+            q1: 2.3833333333333333
+            q3: 5.95
+            iqr: 3.566666666666667
             lower: 0.0
-            upper: 11.337500000000002
+            upper: 11.3
             factor: 1.5
-            n_before: 72
-            n_after: 70
+            n_before: 69
+            n_after: 67
       BoneDeformity:
         single_screening_no_xray:
           dist: null
-          n_raw: 7
+          n_raw: 5
           note: insufficient samples — fall back to pooled fit
       Control:
         single_screening_no_xray:
           dist: null
-          n_raw: 13
+          n_raw: 12
           note: insufficient samples — fall back to pooled fit
       KneeMeniscus:
         single_screening_no_xray:
           dist: null
-          n_raw: 26
+          n_raw: 23
           note: insufficient samples — fall back to pooled fit
   xray_process:
     pooled:
       dist: lognorm
       params:
-      - 0.6189309658877737
-      - -0.5273197124194737
-      - 2.8573897591164803
-      ks_p: 0.09516849693498686
-      aic: 3642.048352353172
-      n: 914
-      n_raw: 978
+      - 0.6181660039497857
+      - -0.5287288354574656
+      - 2.854842468583413
+      ks_p: 0.08983700159684682
+      aic: 3626.2355713213087
+      n: 911
+      n_raw: 976
       iqr_filter:
-        n_in: 978
-        n_outliers: 64
+        n_in: 976
+        n_outliers: 65
         q1: 1.35
         q3: 4.7
         iqr: 3.35
         lower: 0.0
         upper: 9.725000000000001
         factor: 1.5
-        n_before: 978
-        n_after: 914
+        n_before: 976
+        n_after: 911
     standing:
       dist: lognorm
       params:
-      - 0.5789289492409614
-      - -0.594973492218882
-      - 2.717602038931477
-      ks_p: 0.12969981603644676
-      aic: 1979.206996090059
-      n: 527
-      n_raw: 561
+      - 0.5817042665735758
+      - -0.5881162545882238
+      - 2.708200504970096
+      ks_p: 0.14367188662711805
+      aic: 1973.1013254918748
+      n: 525
+      n_raw: 559
       iqr_filter:
-        n_in: 561
+        n_in: 559
         n_outliers: 34
         q1: 1.3333333333333333
         q3: 4.2
@@ -400,8 +400,8 @@ service_times:
         lower: 0.0
         upper: 8.5
         factor: 1.5
-        n_before: 561
-        n_after: 527
+        n_before: 559
+        n_after: 525
     laying:
       dist: lognorm
       params:
@@ -448,12 +448,12 @@ arrivals:
   walkin:
     dist: lognorm
     params:
-    - 1.319594440411187
-    - -0.10967198471199033
-    - 5.0673135591169265
-    ks_p: 0.9730872420831468
-    aic: 4599.5981221178445
-    n: 692
+    - 1.298483224903784
+    - -0.1469989419067918
+    - 5.222695880723249
+    ks_p: 0.6936978368765402
+    aic: 4505.751267774275
+    n: 675
   appointment:
     mode: deterministic_schedule
     sim_time_zero_is: 08:00_first_day
@@ -504,12 +504,12 @@ arrivals:
   appointment_inter_arrival:
     dist: lognorm
     params:
-    - 1.468612516974732
-    - -0.04048677656570054
-    - 2.702063003296637
-    ks_p: 0.12245401328129613
-    aic: 5678.867978643188
-    n: 1014
+    - 1.418000451560357
+    - -0.058563804350003475
+    - 2.832530784732168
+    ks_p: 0.5762544445976057
+    aic: 5647.188578937099
+    n: 1004
 assumptions:
   walkin_jitter:
     dist: triang

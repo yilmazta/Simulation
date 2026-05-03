@@ -50,6 +50,9 @@ LAYING_ROOM_SUFFIX = 32
 LATE_ARRIVAL_CUTOFF_HOUR = 16
 APPOINTMENT_DEVIATION_HOURS = 1.0
 
+LUNCH_BREAK_START = "12:00:00"
+LUNCH_BREAK_END = "13:00:00"
+
 # Clinic policy overrides after time-based :func:`classify_walkin_vs_appointment`.
 # Tumor accepts walk-ins alongside appointments — we do **not** force a single type there.
 APPOINTMENT_ONLY_DEPARTMENTS: frozenset[str] = frozenset({"ChildOrtho"})
@@ -206,23 +209,6 @@ def drop_cekim_without_rontgen_room(df: pd.DataFrame, log: CleaningLog | None = 
     return cleaned
 
 
-def drop_tetkik_without_muayene_kabul(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
-    """Drop rows with an X-ray request time but no exam-accept timestamp."""
-
-    before = len(df)
-    bad = df["TETKIK_ISTEK_SAATI"].notna() & df["MUAYENE_KABUL_ZAMANI"].isna()
-    cleaned = df.loc[~bad].copy()
-
-    if log is not None:
-        log.record(
-            "drop_tetkik_without_muayene_kabul",
-            before,
-            len(cleaned),
-            note="Removed rows with TETKIK_ISTEK_SAATI set but MUAYENE_KABUL_ZAMANI missing.",
-        )
-    return cleaned
-
-
 def consolidate_xray_duplicates(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
     """Collapse multi-angle X-ray rows into a single patient visit.
 
@@ -260,6 +246,39 @@ def consolidate_xray_duplicates(df: pd.DataFrame, log: CleaningLog | None = None
             note="Multi-angle X-ray shots collapsed to one visit per (patient, day, doctor).",
         )
     return consolidated
+
+
+def drop_zero_second_exams(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
+    """Drop instant exams with no call time.
+
+    These rows show ``MUAYENE_SONLANDIRMA_ZAMANI - MUAYENE_KABUL_ZAMANI`` of less
+    than one minute (sometimes zero) and have no ``CAGRILMA_ZAMANI``. They
+    typically correspond to a patient stopping by for a quick request like
+    "Reçetemi yenileyebilir misiniz?" where the doctor opens and closes the
+    record with no real consultation. Including them would deflate the service
+    time distribution.
+    """
+
+    before = len(df)
+    duration_sec = (
+        df["MUAYENE_SONLANDIRMA_ZAMANI"] - df["MUAYENE_KABUL_ZAMANI"]
+    ).dt.total_seconds()
+    bad = (
+        df["MUAYENE_KABUL_ZAMANI"].notna()
+        & df["MUAYENE_SONLANDIRMA_ZAMANI"].notna()
+        & (duration_sec < 60)
+        & df["CAGRILMA_ZAMANI"].isna()
+    )
+    cleaned = df.loc[~bad].copy()
+
+    if log is not None:
+        log.record(
+            "drop_zero_second_exams",
+            before,
+            len(cleaned),
+            note=f"Removed {int(bad.sum())} sub-1-minute exams with no CAGRILMA_ZAMANI.",
+        )
+    return cleaned
 
 
 def drop_room_160(df: pd.DataFrame, log: CleaningLog | None = None) -> pd.DataFrame:
@@ -592,7 +611,12 @@ def classify_walkin_vs_appointment(df: pd.DataFrame, log: CleaningLog | None = N
        from ``.cursor/master.mdc``).
     3. Temporal deviation between scheduled and actual start beyond one hour
        in *either* direction -> walk-in (slotted into an open doctor).
-    4. Otherwise -> appointment.
+    4. ``RANDEVU_BASLAMA_SAATI`` falls inside the lunch window
+       ``[LUNCH_BREAK_START, LUNCH_BREAK_END]`` (12:00-13:00 inclusive) -> walk-in.
+       The clinic does not run regular appointments during lunch, so any slot
+       booked into that window is treated as a walk-in squeezed into the
+       doctor's break.
+    5. Otherwise -> appointment.
 
     If ``MUAYENE_KABUL_ZAMANI`` is missing we default to appointment because
     the patient was registered on a schedule but never seen.
@@ -608,17 +632,28 @@ def classify_walkin_vs_appointment(df: pd.DataFrame, log: CleaningLog | None = N
     no_appt = df["RANDEVU_BASLAMA_SAATI"].isna()
     deviation = has_accept & (delta_hours.abs() >= APPOINTMENT_DEVIATION_HOURS)
 
-    walkin_mask = no_appt | late_hour | deviation
+    appt_time = df["RANDEVU_BASLAMA_SAATI"].dt.time
+    lunch_start = pd.Timestamp(LUNCH_BREAK_START).time()
+    lunch_end = pd.Timestamp(LUNCH_BREAK_END).time()
+    lunch_slot = df["RANDEVU_BASLAMA_SAATI"].notna() & appt_time.between(
+        lunch_start, lunch_end, inclusive="both"
+    )
+
+    walkin_mask = no_appt | late_hour | deviation | lunch_slot
     df["patient_type"] = np.where(walkin_mask, "walkin", "appointment")
     df["appointment_delta_hours"] = delta_hours
 
     if log is not None:
         counts = df["patient_type"].value_counts().to_dict()
+        n_lunch = int(lunch_slot.sum())
         log.record(
             "classify_walkin_vs_appointment",
             len(df),
             len(df),
-            note=f"patient_type counts: {counts}",
+            note=(
+                f"patient_type counts: {counts}; "
+                f"lunch-window appointments relabelled to walkin: {n_lunch}"
+            ),
         )
     return df
 
@@ -777,8 +812,8 @@ def load_and_clean(
     log.record("load_raw", len(df), len(df), note=f"Loaded {len(df)} raw rows from {path}")
 
     df = drop_cekim_without_rontgen_room(df, log)
-    df = drop_tetkik_without_muayene_kabul(df, log)
     df = consolidate_xray_duplicates(df, log)
+    df = drop_zero_second_exams(df, log)
     df = drop_room_160(df, log)
     df = flag_call_time_anomaly(df, log)
     df = flag_open_case(df, log)
